@@ -23,20 +23,20 @@ app.Entity = function(){
 		var speed = this.movementSpeed * dt;
 		
 		if((this.location[0] + this.radius) >= 400){
-			this.velocity[0] *= -speed;	
+			this.velocity[0] *= -speed * (3/4);	
 			this.location[0] = 400 - this.radius;
 		}
-		if((this.location[0] + this.radius) < 0){
-			this.velocity[0] *= -speed;	
-			this.location[0] = 0;
+		if((this.location[0] - this.radius) <= 0){
+			this.velocity[0] *= -speed * (3/4);	
+			this.location[0] = 0 + this.radius;
 		}
 		if((this.location[1] + this.radius) > 480){
-			this.velocity[1] *= -speed;
+			this.velocity[1] *= -speed * (3/4);
 			this.location[1] = 480 - this.radius;
 		}
-		if((this.location[1] + this.radius) < 0){
-			this.velocity[1] *= -speed;
-			this.location[1] = 0;
+		if((this.location[1] - this.radius) <= 0){
+			this.velocity[1] *= -speed * (3/4);
+			this.location[1] = 0 + this.radius;
 		}
 		applyForce(this.gravity,this.acceleration);
 		applyForce(this.wind,this.acceleration);
