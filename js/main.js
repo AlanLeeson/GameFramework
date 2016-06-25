@@ -6,11 +6,11 @@ app.Main = {
 
 	canvas : undefined,
 	ctx : undefined,
+
+	entities : [],
 	
 	//var used for finding dt
 	updatedTime : 0,
-	
-	entity : undefined,
 
 	init : function(){
 		
@@ -18,8 +18,34 @@ app.Main = {
 		this.canvas = document.querySelector('canvas');
 		this.ctx = this.canvas.getContext('2d');
 		
-		this.entity = new app.Entity(this.canvas.width/2,this.canvas.height/2,"rgba(255,20,50,0.5)");
-		
+		for(var i = 0; i < 50; i++)
+		{
+			this.entities.push(
+				new app.Entity(
+					this.canvas.width * Math.random(), this.canvas.height * Math.random(), 
+					20,"rgba(255,0,0,0.5)", vec2.fromValues(0,2), vec2.fromValues(1,0), 40));
+		}
+		for(var i = 0; i < 50; i++)
+		{
+			this.entities.push(
+				new app.Entity(
+					this.canvas.width * Math.random(), this.canvas.height * Math.random(), 
+					20,"rgba(0,255,0,0.5)", vec2.fromValues(0,-2), vec2.fromValues(-1,0), 40));
+		}
+		for(var i = 0; i < 50; i++)
+		{
+			this.entities.push(
+				new app.Entity(
+					this.canvas.width * Math.random(), this.canvas.height * Math.random(), 
+					20,"rgba(0,0,255,0.5)", vec2.fromValues(0,2), vec2.fromValues(-1,0), 40));
+		}
+		for(var i = 0; i < 50; i++)
+		{
+			this.entities.push(
+				new app.Entity(
+					this.canvas.width * Math.random(), this.canvas.height * Math.random(), 
+					20,"rgba(255,255,255,0.5)", vec2.fromValues(0,-2), vec2.fromValues(1,0), 40));
+		}
 		//call the game loop to start the game
 		this.gameLoop();
 	},
@@ -35,7 +61,10 @@ app.Main = {
 	//renders all objects in the game
 	render : function(ctx){
 		app.draw.rect(ctx,0,0,this.canvas.width,this.canvas.height,"#aaa");
-		this.entity.render(ctx);
+		for(var i = 0; i < this.entities.length; i++)
+		{
+			this.entities[i].render(ctx);
+		}
 	},
 	
 	//updates the objects in the game
@@ -43,7 +72,10 @@ app.Main = {
 		//find deltaTime
 		var dt  = this.calculateDeltaTime();
 
-		this.entity.update(dt);
+		for(var i = 0; i < this.entities.length; i++)
+		{
+			this.entities[i].update(dt);
+		}
 	},
 	
 	calculateDeltaTime : function(){
