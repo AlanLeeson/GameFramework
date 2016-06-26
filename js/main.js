@@ -7,7 +7,7 @@ app.Main = {
 	canvas : undefined,
 	ctx : undefined,
 
-	entities : [],
+	world : undefined,
 	
 	//var used for finding dt
 	updatedTime : 0,
@@ -17,34 +17,36 @@ app.Main = {
 		//assign the canvas and the canvas context
 		this.canvas = document.querySelector('canvas');
 		this.ctx = this.canvas.getContext('2d');
+
+		this.world = new app.World(vec2.fromValues(1,0), vec2.fromValues(0,1));
 		
 		for(var i = 0; i < 50; i++)
 		{
-			this.entities.push(
+			this.world.addEntity(
 				new app.Entity(
 					this.canvas.width * Math.random(), this.canvas.height * Math.random(), 
-					20,"rgba(255,0,0,0.5)", vec2.fromValues(0,2), vec2.fromValues(1,0), 40));
+					20,"rgba(255,0,0,0.5)", 10, this.world));
 		}
 		for(var i = 0; i < 50; i++)
 		{
-			this.entities.push(
+			this.world.addEntity(
 				new app.Entity(
 					this.canvas.width * Math.random(), this.canvas.height * Math.random(), 
-					20,"rgba(0,255,0,0.5)", vec2.fromValues(0,-2), vec2.fromValues(-1,0), 40));
+					20,"rgba(0,255,0,0.5)", 20, this.world));
 		}
 		for(var i = 0; i < 50; i++)
 		{
-			this.entities.push(
+			this.world.addEntity(
 				new app.Entity(
 					this.canvas.width * Math.random(), this.canvas.height * Math.random(), 
-					20,"rgba(0,0,255,0.5)", vec2.fromValues(0,2), vec2.fromValues(-1,0), 40));
+					20,"rgba(0,0,255,0.5)", 30, this.world));
 		}
 		for(var i = 0; i < 50; i++)
 		{
-			this.entities.push(
+			this.world.addEntity(
 				new app.Entity(
 					this.canvas.width * Math.random(), this.canvas.height * Math.random(), 
-					20,"rgba(255,255,255,0.5)", vec2.fromValues(0,-2), vec2.fromValues(1,0), 40));
+					20,"rgba(255,255,255,0.5)", 40, this.world));
 		}
 		//call the game loop to start the game
 		this.gameLoop();
@@ -61,9 +63,9 @@ app.Main = {
 	//renders all objects in the game
 	render : function(ctx){
 		app.draw.rect(ctx,0,0,this.canvas.width,this.canvas.height,"#aaa");
-		for(var i = 0; i < this.entities.length; i++)
+		for(var i = 0; i < this.world.numEntities(); i++)
 		{
-			this.entities[i].render(ctx);
+			this.world.getEntity(i).render(ctx);
 		}
 	},
 	
@@ -72,9 +74,9 @@ app.Main = {
 		//find deltaTime
 		var dt  = this.calculateDeltaTime();
 
-		for(var i = 0; i < this.entities.length; i++)
+		for(var i = 0; i < this.world.numEntities(); i++)
 		{
-			this.entities[i].update(dt);
+			this.world.getEntity(i).update(dt);
 		}
 	},
 	

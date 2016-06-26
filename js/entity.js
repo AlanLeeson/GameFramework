@@ -4,16 +4,16 @@ var app = app || {};
 
 app.Entity = function(){
 
-	var Entity = function(x,y,radius,col,gravity = vec2.fromValues(0,0), wind = vec2.fromValues(0,0), movement = 20){
+	var Entity = function(x,y,radius,col,movement,world){
 		this.type = "entity";
 		this.col = col;
 		this.radius = radius;
 		this.location = vec2.fromValues(x,y);
 		this.velocity = vec2.create();
 		this.acceleration = vec2.create();
-		this.gravity = gravity;
-		this.wind = wind;
 		this.movementSpeed = movement;
+
+		this.world = world;
 	};
 	
 	var p = Entity.prototype;
@@ -38,8 +38,8 @@ app.Entity = function(){
 			this.velocity[1] *= -speed * (3/4);
 			this.location[1] = 0 + this.radius;
 		}
-		applyForce(this.gravity,this.acceleration);
-		applyForce(this.wind,this.acceleration);
+		applyForce(this.world.getGravity(),this.acceleration);
+		applyForce(this.world.getWind(),this.acceleration);
 		updateLocation(this.velocity,this.acceleration,this.location);
 		this.acceleration = vec2.create();
 		
