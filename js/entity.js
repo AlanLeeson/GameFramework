@@ -4,7 +4,7 @@ var app = app || {};
 
 app.Entity = function(){
 
-	var Entity = function(x,y,radius,col,movement,world){
+	var Entity = function(x,y,radius,col,movement){
 		this.type = "entity";
 		this.col = col;
 		this.radius = radius;
@@ -12,8 +12,6 @@ app.Entity = function(){
 		this.velocity = vec2.create();
 		this.acceleration = vec2.create();
 		this.movementSpeed = movement;
-
-		this.world = world;
 	};
 	
 	var p = Entity.prototype;
@@ -38,15 +36,19 @@ app.Entity = function(){
 			this.velocity[1] *= -speed;
 			this.location[1] = 0 + this.radius;
 		}
-		applyForce(this.world.getGravity(),this.acceleration);
-		applyForce(this.world.getWind(),this.acceleration);
-		updateLocation(this.velocity,this.acceleration,this.location);
-		this.acceleration = vec2.create();
 		
 	};
 	
 	p.render = function(ctx){
 		app.draw.polygon(ctx,this.location[0],this.location[1],this.radius,8,this.col);
+	};
+	
+	p.applyWorldForces = function(wolrdForces){
+		for(var i = 0; i < wolrdForces.length; i ++){
+			applyForce(wolrdForces[i], this.acceleration);
+		}
+		updateLocation(this.velocity,this.acceleration,this.location);
+		this.acceleration = vec2.create();
 	};
 	
 	return Entity;

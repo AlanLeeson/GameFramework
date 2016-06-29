@@ -52,5 +52,16 @@ app.draw = {
 		ctx.globalAlpha = 0.5;
 		ctx.fill();
 		ctx.globalAlpha = 1.0;
+	},
+	
+	randomRGBA : function(high = 255, low = 0, alpha = 1) {
+		high = high > 255 || high < 0 ? 255 : high;
+		low = low < 0 || low > 255 ? 0 : low;
+		alpha = alpha < 0 || alpha > 1 ? 1 : alpha; 
+		var difference = high - low;
+		var red = parseInt(Math.random() * difference + low);
+		var green = parseInt(Math.random() * difference + low);
+		var blue = parseInt(Math.random() * difference + low);
+		return 'rgba(' + red + ',' + green + ',' + blue + ',' + alpha + ')';
 	}
 };

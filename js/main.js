@@ -7,7 +7,9 @@ app.Main = {
 	canvas : undefined,
 	ctx : undefined,
 
+	loadedForces : undefined,
 	world : undefined,
+	bounds : undefined,
 	
 	//var used for finding dt
 	updatedTime : 0,
@@ -18,35 +20,17 @@ app.Main = {
 		this.canvas = document.querySelector('canvas');
 		this.ctx = this.canvas.getContext('2d');
 
-		this.world = new app.World(vec2.fromValues(1,0), vec2.fromValues(0,1));
+		this.loadedForces = [vec2.fromValues(1,0), vec2.fromValues(0,1)];
+		this.bounds = {width : this.canvas.width, height: this.canvas.height};
 		
-		for(var i = 0; i < 50; i++)
+		this.world = new app.World(this.loadedForces);
+		
+		for(var i = 0; i < 200; i++)
 		{
 			this.world.addEntity(
 				new app.Entity(
-					this.canvas.width * Math.random(), this.canvas.height * Math.random(), 
-					20,"rgba(255,0,0,0.5)", 10, this.world));
-		}
-		for(var i = 0; i < 50; i++)
-		{
-			this.world.addEntity(
-				new app.Entity(
-					this.canvas.width * Math.random(), this.canvas.height * Math.random(), 
-					20,"rgba(0,255,0,0.5)", 20, this.world));
-		}
-		for(var i = 0; i < 50; i++)
-		{
-			this.world.addEntity(
-				new app.Entity(
-					this.canvas.width * Math.random(), this.canvas.height * Math.random(), 
-					20,"rgba(0,0,255,0.5)", 30, this.world));
-		}
-		for(var i = 0; i < 50; i++)
-		{
-			this.world.addEntity(
-				new app.Entity(
-					this.canvas.width * Math.random(), this.canvas.height * Math.random(), 
-					20,"rgba(255,255,255,0.5)", 40, this.world));
+					this.bounds.width * Math.random(), this.bounds.height * Math.random(), 
+					Math.random() * 10 + 15,app.draw.randomRGBA(200,0,0.5), Math.random() * 40));
 		}
 		//call the game loop to start the game
 		this.gameLoop();
@@ -63,10 +47,7 @@ app.Main = {
 	//renders all objects in the game
 	render : function(ctx){
 		app.draw.rect(ctx,0,0,this.canvas.width,this.canvas.height,"#aaa");
-		for(var i = 0; i < this.world.numEntities(); i++)
-		{
-			this.world.getEntity(i).render(ctx);
-		}
+		this.world.render(ctx);
 	},
 	
 	//updates the objects in the game
@@ -74,10 +55,7 @@ app.Main = {
 		//find deltaTime
 		var dt  = this.calculateDeltaTime();
 
-		for(var i = 0; i < this.world.numEntities(); i++)
-		{
-			this.world.getEntity(i).update(dt);
-		}
+		this.world.update(dt);
 	},
 	
 	calculateDeltaTime : function(){
