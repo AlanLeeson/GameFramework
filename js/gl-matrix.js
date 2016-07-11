@@ -456,9 +456,10 @@ vec2.negate = function(out, a) {
  * @param {vec2} a vector to invert
  * @returns {vec2} out
  */
-vec2.inverse = function(out, a) {
-  out[0] = 1.0 / a[0];
-  out[1] = 1.0 / a[1];
+vec2.inverse = function(a) {
+  var out = [0,0];
+  out[0] = - a[0];
+  out[1] = - a[1];
   return out;
 };
 

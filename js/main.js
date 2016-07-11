@@ -24,14 +24,14 @@ app.Main = {
 		this.bounds = {width : this.canvas.width, height: this.canvas.height};
 		
 		this.world = new app.World(this.loadedForces);
-		
 		for(var i = 0; i < 200; i++)
 		{
 			this.world.addEntity(
 				new app.Entity(
 					this.bounds.width * Math.random(), this.bounds.height * Math.random(), 
-					Math.random() * 10 + 15,app.draw.randomRGBA(200,0,0.5), Math.random() * 40));
+					Math.random() * 10 + 15,app.draw.randomRGBA(200,0,0.5), Math.random() * 40, "moveable"));
 		}
+		this.world.addEntity(new app.Entity(200, 200, 20, 'rgba(255,0,0,1)', 0, "stationary"));
 		//call the game loop to start the game
 		this.gameLoop();
 	},
