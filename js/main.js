@@ -9,6 +9,7 @@ app.Main = {
 
 	loadedForces : undefined,
 	world : undefined,
+	sprite: undefined,
 	bounds : undefined,
 	
 	//var used for finding dt
@@ -20,10 +21,11 @@ app.Main = {
 		this.canvas = document.querySelector('canvas');
 		this.ctx = this.canvas.getContext('2d');
 
-		this.loadedForces = [vec2.fromValues(1,0), vec2.fromValues(0,1)];
+		this.loadedForces = [vec2.fromValues(0.5,0), vec2.fromValues(0,1)];
 		this.bounds = {width : this.canvas.width, height: this.canvas.height};
 		
 		this.world = new app.World(this.loadedForces);
+		this.sprite = new app.Sprite('spriteExample.png', [0, 0], [15.875, 16], 10, [0, 1, 2, 3, 4, 5, 6, 7]);
 		for(var i = 0; i < 200; i++)
 		{
 			this.world.addEntity(
@@ -48,6 +50,7 @@ app.Main = {
 	render : function(ctx){
 		app.draw.rect(ctx,0,0,this.canvas.width,this.canvas.height,"#aaa");
 		this.world.render(ctx);
+		this.sprite.render(ctx);
 	},
 	
 	//updates the objects in the game
@@ -56,6 +59,7 @@ app.Main = {
 		var dt  = this.calculateDeltaTime();
 
 		this.world.update(dt);
+		this.sprite.update(dt);
 	},
 	
 	calculateDeltaTime : function(){

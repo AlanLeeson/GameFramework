@@ -4,6 +4,9 @@ var app = app || {};
 
 window.onload = function(){
 
-	app.Main.init();
+	resources.load([
+    'spriteExample.png'
+	]);
+	resources.onReady(app.Main.init());
 
 };
