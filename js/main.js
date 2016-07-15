@@ -33,7 +33,22 @@ app.Main = {
 					this.bounds.width * Math.random(), this.bounds.height * Math.random(), 
 					Math.random() * 10 + 15,app.draw.randomRGBA(200,0,0.5), Math.random() * 40, "moveable"));
 		}
-		this.world.addEntity(new app.Entity(200, 200, 20, 'rgba(255,0,0,1)', 0, "stationary"));
+		var entity = new app.Entity(50, 400, 20, 'rgba(255,0,0,1)', 0, "stationary");
+		this.world.addEntity(entity);
+
+		var entity = new app.Entity(100, 100, 20, 'rgba(0,255,0,1)', 0, "stationary");
+		this.world.addEntity(entity);
+
+		var entity = new app.Entity(300, 200, 20, 'rgba(0,0,255,1)', 0, "stationary");
+		this.world.addEntity(entity);
+
+		var entity = new app.Entity(200, 300, 20, 'rgba(255,255,0,1)', 0, "stationary");
+		this.world.addEntity(entity);
+
+		var entityPlayer = new app.Entity(0, 0, 20, 'rgba(255,0,0,1)', 0, "moveable");
+		entityPlayer.setController(new app.KeyboardController());
+		this.world.addEntity(entityPlayer);
+
 		//call the game loop to start the game
 		this.gameLoop();
 	},
