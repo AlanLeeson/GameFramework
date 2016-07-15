@@ -12,11 +12,20 @@ app.Entity = function(){
 		this.velocity = vec2.create();
 		this.acceleration = vec2.create();
 		this.movementSpeed = mass;
+		this.controller = null;
 	};
 	
 	var p = Entity.prototype;
+
+	p.setController = function(controller){
+		this.controller = controller;
+		this.controller.init();
+	};
 	
 	p.update = function(dt){
+		if(this.controller !== null){
+			this.controller.update(this);
+		}
 		
 		switch(this.type) {
 			case 'moveable' : 
@@ -58,6 +67,10 @@ app.Entity = function(){
 		for(var i = 0; i < wolrdForces.length; i ++){
 			applyForce(wolrdForces[i], this.acceleration);
 		}
+	};
+
+	p.applyForce = function(force){
+		applyForce(force, this.acceleration);
 	};
 	
 	return Entity;
