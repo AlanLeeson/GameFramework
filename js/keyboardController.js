@@ -7,13 +7,13 @@ app.KeyboardController = function(){
 	var KeyboardController = function(){
         this.KEYBOARD = {
 			"KEY_LEFT_A": 65,
-            "KEY_LEFT_ARROW": 27,
+            "KEY_LEFT_ARROW": 37,
 			"KEY_UP_W": 87,
-            "KEY_UP_ARROW": 24, 
+            "KEY_UP_ARROW": 38,
 			"KEY_RIGHT_D": 68,
-            "KEY_RIGHT_ARROW": 26,
+            "KEY_RIGHT_ARROW": 39,
 			"KEY_DOWN_S": 83,
-            "KEY_DOWN_ARROW": 25,
+            "KEY_DOWN_ARROW": 40,
 			"KEY_SPACE": 32,
 			"KEY_R": 82
 		};
@@ -36,7 +36,7 @@ app.KeyboardController = function(){
     }
 
     p.update = function(entity){
-        if(this.keydown[this.KEYBOARD.KEY_LEFT_A] || 
+        if(this.keydown[this.KEYBOARD.KEY_LEFT_A] ||
             this.keydown[this.KEYBOARD.KEY_LEFT_ARROW]){
             entity.applyWorldForces([vec2.fromValues(-2,0)]);
 		}
