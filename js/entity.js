@@ -12,31 +12,53 @@ app.Entity = function(){
 		this.velocity = vec2.create();
 		this.acceleration = vec2.create();
 		this.movementSpeed = mass;
+
 		this.controller = null;
+
+		this.removeCondition = null;
 	};
-	
+
 	var p = Entity.prototype;
+
+	p.getLocation = function(){
+		return this.location;
+	}
+
+	p.getRadius = function(){
+		return this.radius;
+	}
 
 	p.setController = function(controller){
 		this.controller = controller;
 		this.controller.init();
 	};
-	
+
+	p.setRemoveCondition = function(removeCondition){
+		this.removeCondition = removeCondition;
+	};
+
+	p.canRemove = function(){
+		if (this.removeCondition !== null) {
+			return this.removeCondition();
+		} else
+			return false;
+	}
+
 	p.update = function(dt){
 		if(this.controller !== null){
 			this.controller.update(this);
 		}
-		
+
 		switch(this.type) {
-			case 'moveable' : 
+			case 'moveable' :
 				var speed = this.movementSpeed * dt;
-		
+
 				if((this.location[0] + this.radius) >= 400){
-					this.velocity[0] *= -speed;	
+					this.velocity[0] *= -speed;
 					this.location[0] = 400 - this.radius;
 				}
 				if((this.location[0] - this.radius) <= 0){
-					this.velocity[0] *= -speed;	
+					this.velocity[0] *= -speed;
 					this.location[0] = 0 + this.radius;
 				}
 				if((this.location[1] + this.radius) > 480){
@@ -47,22 +69,22 @@ app.Entity = function(){
 					this.velocity[1] *= -speed;
 					this.location[1] = 0 + this.radius;
 				}
-		
+
 				updateLocation(this.velocity,this.acceleration,this.location);
 				this.acceleration = vec2.create();
-				
+
 				break;
 			case 'stationary' :
 				break;
-		
+
 		}
-		
+
 	};
-	
+
 	p.render = function(ctx){
 		app.draw.polygon(ctx,this.location[0],this.location[1],this.radius,8,this.col);
 	};
-	
+
 	p.applyWorldForces = function(wolrdForces){
 		for(var i = 0; i < wolrdForces.length; i ++){
 			applyForce(wolrdForces[i], this.acceleration);
@@ -72,7 +94,7 @@ app.Entity = function(){
 	p.applyForce = function(force){
 		applyForce(force, this.acceleration);
 	};
-	
+
 	return Entity;
 
 }();
