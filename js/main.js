@@ -55,7 +55,7 @@ app.Main = {
 		var entity = new app.Entity(250, 50, 20, 'rgba(255,255,0,1)', 0, "stationary");
 		this.world.addEntity(entity);
 
-		var entityPlayer = new app.Entity(this.bounds["width"] / 2, this.bounds["height"] / 2, 20, 'rgba(255,0,0,1)', 0, "moveable");
+		var entityPlayer = new app.PlayerEntity(this.bounds["width"] / 2, this.bounds["height"] / 2, 20, 'rgba(255,0,0,1)', 0, "moveable");
 		entityPlayer.setController(new app.KeyboardController());
 		this.world.addEntity(entityPlayer);
 
