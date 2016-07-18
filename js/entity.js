@@ -16,9 +16,21 @@ app.Entity = function(){
 		this.controller = null;
 
 		this.removeCondition = null;
+
+		this.listeners = [];
 	};
 
 	var p = Entity.prototype;
+
+	p.updateEntityEvent = function(){
+		for(var i = 0; i < this.listeners.length; i++){
+			this.listeners[i].doUpdateEntityEvent(this);
+		}
+	}
+
+	p.addUpdateListener = function(listener){
+		this.listeners.push(listener);
+	}
 
 	p.getLocation = function(){
 		return this.location;
@@ -34,6 +46,8 @@ app.Entity = function(){
 	};
 
 	p.setRemoveCondition = function(removeCondition){
+		this.updateEntityEvent();
+
 		this.removeCondition = removeCondition;
 	};
 
