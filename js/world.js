@@ -10,7 +10,9 @@ app.World = function(){
 		this.gravity = gravity;
 		this.wind = wind;
 
-        this.entities = [];
+    this.entities = [];
+
+		this.updateFunction = null;
 	};
 
 	var p = World.prototype;
@@ -31,9 +33,24 @@ app.World = function(){
     	this.forces.push(force);
     };
 
+		p.setUpdateFunction = function(updateFunction){
+			this.updateFunction = updateFunction;
+		};
+
+		p.doUpdateFunction = function(){
+			if (this.updateFunction !== null) {
+				return this.updateFunction();
+			}
+		};
+
     p.addEntity = function(entity){
+				entity.addUpdateListener(this);
         this.entities.push(entity);
     };
+
+		p.updateEntityHandler = function(e) {
+			console.log(e.entity);
+		};
 
     p.getEntity = function(i){
         return this.entities[i];
@@ -42,6 +59,10 @@ app.World = function(){
     p.numEntities = function(){
         return this.entities.length;
     };
+
+		p.doUpdateEntityEvent = function(entity){
+				console.log(entity);
+		};
 
     p.update = function(dt){
     	for(var i = this.entities.length - 1; i >= 0; i--)

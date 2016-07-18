@@ -25,20 +25,24 @@ app.Main = {
 		this.bounds = {width : this.canvas.width, height: this.canvas.height};
 
 		this.world = new app.World(this.loadedForces);
+
+		var bounds = this.bounds;
+		this.world.setUpdateFunction(function(){
+			while(this.numEntities() < 100){
+				var entity =	new app.Entity(
+						bounds.width * Math.random(), bounds.height * Math.random(),
+						Math.random() * 10 + 5,app.draw.randomRGBA(200,0,0.5), Math.random() * 20, "moveable");
+
+					entity.setRemoveCondition(function(){
+						return this.getLocation()[1] + this.getRadius() >= bounds["height"];
+					});
+
+					this.addEntity(entity);
+			}
+		});
+
 		this.sprite = new app.Sprite('spriteExample.png', [0, 0], [15.875, 16], 10, [0, 1, 2, 3, 4, 5, 6, 7]);
-		for(var i = 0; i < 200; i++)
-		{
-			var entity =	new app.Entity(
-					this.bounds.width * Math.random(), this.bounds.height * Math.random(),
-					Math.random() * 10 + 15,app.draw.randomRGBA(200,0,0.5), Math.random() * 40, "moveable");
 
-				var bounds = this.bounds;
-				entity.setRemoveCondition(function(){
-					return this.getLocation()[1] + this.getRadius() >= bounds["height"];
-				});
-
-				this.world.addEntity(entity);
-		}
 		var entity = new app.Entity(50, 50, 20, 'rgba(255,0,0,1)', 0, "stationary");
 		this.world.addEntity(entity);
 
@@ -54,6 +58,10 @@ app.Main = {
 		var entityPlayer = new app.Entity(this.bounds["width"] / 2, this.bounds["height"] / 2, 20, 'rgba(255,0,0,1)', 0, "moveable");
 		entityPlayer.setController(new app.KeyboardController());
 		this.world.addEntity(entityPlayer);
+
+		entityPlayer.setRemoveCondition(function(){
+			return false;
+		});
 
 		//call the game loop to start the game
 		this.gameLoop();
@@ -82,18 +90,7 @@ app.Main = {
 		this.world.update(dt);
 		this.sprite.update(dt);
 
-		while(this.world.numEntities() < 200){
-			var entity =	new app.Entity(
-					this.bounds.width * Math.random(), this.bounds.height * Math.random(),
-					Math.random() * 10 + 15,app.draw.randomRGBA(200,0,0.5), Math.random() * 40, "moveable");
-
-				var bounds = this.bounds;
-				entity.setRemoveCondition(function(){
-					return this.getLocation()[1] + this.getRadius() >= bounds["height"];
-				});
-
-				this.world.addEntity(entity);
-		}
+		this.world.doUpdateFunction();
 	},
 
 	calculateDeltaTime : function(){
