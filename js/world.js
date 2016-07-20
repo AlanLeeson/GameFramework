@@ -4,13 +4,12 @@ var app = app || {};
 
 app.World = function(){
 
-	var World = function(forces, gravity = vec2.fromValues(0,0), wind = vec2.fromValues(0,0)){
+	var World = function(forces){
 		this.type = "world";
+		
 		this.forces = forces;
-		this.gravity = gravity;
-		this.wind = wind;
-
-    this.entities = [];
+		
+    	this.entities = [];
 
 		this.updateFunction = null;
 	};

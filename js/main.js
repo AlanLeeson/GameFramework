@@ -11,6 +11,7 @@ app.Main = {
 	world : undefined,
 	sprite: undefined,
 	bounds : undefined,
+	gameObject : undefined,
 
 	//var used for finding dt
 	updatedTime : 0,
@@ -23,6 +24,8 @@ app.Main = {
 
 		this.loadedForces = [vec2.fromValues(0.15,0), vec2.fromValues(0,1)];
 		this.bounds = {width : this.canvas.width, height: this.canvas.height};
+		
+		this.gameObject = new app.GameObject();
 
 		this.world = new app.World(this.loadedForces);
 
@@ -30,14 +33,14 @@ app.Main = {
 		this.world.setUpdateFunction(function(){
 			while(this.numEntities() < 100){
 				var entity =	new app.Entity(
-						bounds.width * Math.random(), bounds.height * Math.random(),
-						Math.random() * 10 + 5,app.draw.randomRGBA(200,0,0.5), Math.random() * 20, "moveable");
+					bounds.width * Math.random(), bounds.height * Math.random(),
+					Math.random() * 10 + 5,app.draw.randomRGBA(200,0,0.5), Math.random() * 20, "moveable");
 
-					entity.setRemoveCondition(function(){
-						return this.getLocation()[1] + this.getRadius() >= bounds["height"];
-					});
+				entity.setRemoveCondition(function(){
+					return this.getLocation()[1] + this.getRadius() >= bounds["height"];
+				});
 
-					this.addEntity(entity);
+				this.addEntity(entity);
 			}
 		});
 
@@ -62,6 +65,8 @@ app.Main = {
 		entityPlayer.setRemoveCondition(function(){
 			return false;
 		});
+		
+		this.gameObject.setWorld(this.world);
 
 		//call the game loop to start the game
 		this.gameLoop();
@@ -78,7 +83,7 @@ app.Main = {
 	//renders all objects in the game
 	render : function(ctx){
 		app.draw.rect(ctx,0,0,this.canvas.width,this.canvas.height,"#aaa");
-		this.world.render(ctx);
+		this.gameObject.render(ctx);
 		this.sprite.render(ctx);
 	},
 
@@ -87,10 +92,8 @@ app.Main = {
 		//find deltaTime
 		var dt  = this.calculateDeltaTime();
 
-		this.world.update(dt);
+		this.gameObject.update(dt);
 		this.sprite.update(dt);
-
-		this.world.doUpdateFunction();
 	},
 
 	calculateDeltaTime : function(){
