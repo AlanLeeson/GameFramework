@@ -5,7 +5,6 @@ var app = app || {};
 app.GameObject = function () {
 
 	var GameObject = function() {
-		this.currentState = 0;
 		this.world = new app.World({});
 		this.states = {"PLAY" : 0, "PAUSE" : 1, "MENU" : 2};
 		this.changeState = 2;
@@ -26,28 +25,28 @@ app.GameObject = function () {
 	};
 	
 	p.update = function(dt) {
-		if(this.states.PLAY === this.currentState){
+		if(this.states.PLAY === this.world.currentState){
 			this.world.update(dt);
 			this.world.doUpdateFunction();
 		}
-		if(this.states.PAUSE === this.currentState){
+		if(this.states.PAUSE === this.world.currentState){
 			
 		}
 		if(this.changeState % 200 == 0) {
-			this.currentState = this.currentState == 2 ? 0 : this.currentState + 1;
+			this.world.currentState = this.world.currentState == 2 ? 0 : this.world.currentState + 1;
 		}
 		this.changeState += 1;
 	};
 	
 	p.render = function(ctx) {
-		if(this.states.PLAY === this.currentState){
+		if(this.states.PLAY === this.world.currentState){
 			this.world.render(ctx);
 		}
-		else if(this.states.PAUSE === this.currentState){
+		else if(this.states.PAUSE === this.world.currentState){
 			this.world.render(ctx);
 			app.draw.text(ctx,"Currently Paused",100,100,20,'rgba(50,50,200,1)');
 		}
-		else if(this.states.MENU === this.currentState){
+		else if(this.states.MENU === this.world.currentState){
 			app.draw.text(ctx,"Currently In a Menu",100,100,20,'rgba(50,50,200,1)');
 		}
 	};

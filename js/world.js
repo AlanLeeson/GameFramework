@@ -12,6 +12,8 @@ app.World = function(){
     	this.entities = [];
 
 		this.updateFunction = null;
+		
+		this.currentState = 0;
 	};
 
 	var p = World.prototype;
