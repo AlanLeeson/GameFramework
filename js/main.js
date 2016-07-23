@@ -33,7 +33,7 @@ app.Main = {
 		this.world.setUpdateFunction(function(){
 			while(this.numEntities() < 100){
 				var entity =	new app.Entity(
-					bounds.width * Math.random(), bounds.height * Math.random(),
+					bounds.width * Math.random(), 0,
 					Math.random() * 10 + 5,app.draw.randomRGBA(200,0,0.5), Math.random() * 20, "moveable");
 
 				entity.setRemoveCondition(function(){
