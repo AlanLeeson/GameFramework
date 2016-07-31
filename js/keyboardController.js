@@ -6,6 +6,7 @@ app.KeyboardController = function(){
 
 	var KeyboardController = function(){
         this.keyActions = [];
+				this.singlePress = [];
 				this.keydown = [];
     };
 
@@ -23,20 +24,24 @@ app.KeyboardController = function(){
         });
     };
 
-		p.assignKeyAction = function (keys, action)
+		p.assignKeyAction = function (keys, action, singlePress = false)
 		{
 			for(var i = 0; i < keys.length; i++)
 			{
 				this.keyActions[keys[i]] = action;
+				this.singlePress[keys[i]] = singlePress;
 			}
 		};
 
-    p.update = function(entity){
+    p.update = function(object){
 			for(var key in this.keyActions)
 			{
 				if(this.keydown[key])
 				{
-					this.keyActions[key](entity);
+					this.keyActions[key](object);
+
+					if(this.singlePress[key])
+	        	this.keydown[key] = false;
 				}
 			}
     };

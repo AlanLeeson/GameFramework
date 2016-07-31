@@ -56,7 +56,7 @@ app.Entity = function(){
 			return this.removeCondition();
 		} else
 			return false;
-	}
+	};
 
 	p.update = function(dt){
 		if(this.controller !== null){
@@ -99,9 +99,9 @@ app.Entity = function(){
 		app.draw.polygon(ctx,this.location[0],this.location[1],this.radius,8,this.col);
 	};
 
-	p.applyWorldForces = function(worldForces){
-		for(var i = 0; i < worldForces.length; i ++){
-			applyForce(worldForces[i], this.acceleration);
+	p.applyWorldForces = function(wolrdForces){
+		for(var i = 0; i < wolrdForces.length; i ++){
+			applyForce(wolrdForces[i], this.acceleration);
 		}
 	};
 
