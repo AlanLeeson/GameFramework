@@ -25,8 +25,23 @@ app.Main = {
 
 		this.loadedForces = [vec2.fromValues(0.15,0), vec2.fromValues(0,1)];
 		this.bounds = {width : this.canvas.width, height: this.canvas.height};
-		
+
 		this.gameObject = new app.GameObject();
+		this.gameObject.setCurrentState(this.gameObject.states.PLAY);
+
+		var keyboardController = new app.KeyboardController();
+		keyboardController.assignKeyAction(["r"], function(gameObject)
+		{
+			if(gameObject.getCurrentState() === gameObject.states.PLAY)
+			{
+				gameObject.setCurrentState("PAUSE");
+			}
+			else if(gameObject.getCurrentState() === gameObject.states.PAUSE)
+			{
+				gameObject.setCurrentState("PLAY");
+			}
+		}, true);
+		this.gameObject.setController(keyboardController);
 
 		this.world = new app.World(this.loadedForces);
 
@@ -67,13 +82,32 @@ app.Main = {
 		this.world.addEntity(entity);
 
 		var entityPlayer = new app.PlayerEntity(this.bounds["width"] / 2, this.bounds["height"] / 2, 20, 'rgba(255,0,0,1)', 0, "moveable");
-		entityPlayer.setController(new app.KeyboardController());
+
+		var keyboardController = new app.KeyboardController();
+		keyboardController.assignKeyAction([ "a", "ArrowLeft" ], function(entity)
+		{
+			entity.applyWorldForces([vec2.fromValues(-2, 0)]);
+		});
+		keyboardController.assignKeyAction([ "d", "ArrowRight" ], function(entity)
+		{
+			entity.applyWorldForces([vec2.fromValues(2, 0)]);
+		});
+		keyboardController.assignKeyAction([ "s", "ArrowDown" ], function(entity)
+		{
+			entity.applyWorldForces([vec2.fromValues(0, 2)]);
+		});
+		keyboardController.assignKeyAction([ "w", "ArrowUp" ], function(entity)
+		{
+			entity.applyWorldForces([vec2.fromValues(0, -2)]);
+		});
+
+		entityPlayer.setController(keyboardController);
+		this.world.addEntity(entityPlayer);
+
 		entityPlayer.setRemoveCondition(function(){
 			return false;
 		});
-		
-		this.world.addEntity(entityPlayer);
-		
+
 		this.gameObject.setWorld(this.world);
 
 		//call the game loop to start the game
