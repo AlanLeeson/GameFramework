@@ -44,7 +44,7 @@ app.Sprite = function(){
 		} else {
 			x += frame * this.size[0];
 		}
-		ctx.drawImage(resources.get(this.url), x, y, this.size[0], this.size[1], 0, 0, this.size[0] * 2, this.size[1] * 2);
+		ctx.drawImage(resources.get(this.url), x, y, this.size[0], this.size[1], 0, 0, this.size[0], this.size[1]);
 	}
 
 	return Sprite;

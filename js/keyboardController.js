@@ -46,7 +46,8 @@ app.KeyboardController = function(){
 		}
 		if(this.keydown[this.KEYBOARD.KEY_UP_W] ||
             this.keydown[this.KEYBOARD.KEY_UP_ARROW]){
-            entity.applyWorldForces([vec2.fromValues(0,-2)]);
+            entity.applyWorldForces([vec2.fromValues(0,-20)]);
+            this.keydown[this.KEYBOARD.KEY_UP_W] = this.keydown[this.KEYBOARD.KEY_UP_ARROW] = false;
 		}
 		if(this.keydown[this.KEYBOARD.KEY_DOWN_S] ||
             this.keydown[this.KEYBOARD.KEY_DOWN_S]){
