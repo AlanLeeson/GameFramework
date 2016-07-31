@@ -12,6 +12,7 @@ app.Main = {
 	sprite: undefined,
 	bounds : undefined,
 	gameObject : undefined,
+	menu : undefined,
 
 	//var used for finding dt
 	updatedTime : 0,
@@ -43,7 +44,14 @@ app.Main = {
 				this.addEntity(entity);
 			}
 		});
+		
+		/*** Initialize menu ***/
+		this.menu = new app.Menu();
+		this.menu.addBackgroundSprite(new app.Sprite('menuBackground.jpg', [0, 0], [this.bounds.width, this.bounds.height], 0));
+		this.menu.addTitle("MENU TITLE");
+		this.gameObject.setMenu(this.menu);
 
+		/*** Initialize entities ***/
 		this.sprite = new app.Sprite('spriteExample.png', [0, 0], [15.875, 16], 10, [0, 1, 2, 3, 4, 5, 6, 7]);
 
 		var entity = new app.Entity(50, 50, 20, 'rgba(255,0,0,1)', 0, "stationary");
@@ -60,11 +68,11 @@ app.Main = {
 
 		var entityPlayer = new app.PlayerEntity(this.bounds["width"] / 2, this.bounds["height"] / 2, 20, 'rgba(255,0,0,1)', 0, "moveable");
 		entityPlayer.setController(new app.KeyboardController());
-		this.world.addEntity(entityPlayer);
-
 		entityPlayer.setRemoveCondition(function(){
 			return false;
 		});
+		
+		this.world.addEntity(entityPlayer);
 		
 		this.gameObject.setWorld(this.world);
 

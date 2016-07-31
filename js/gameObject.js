@@ -8,6 +8,7 @@ app.GameObject = function () {
 		this.world = new app.World({});
 		this.states = {"PLAY" : 0, "PAUSE" : 1, "MENU" : 2};
 		this.changeState = 2;
+		this.menu = new app.Menu();
 	};
 	
 	var p = GameObject.prototype;
@@ -22,6 +23,10 @@ app.GameObject = function () {
 	
 	p.setWorld = function(world) {
 		this.world = world;
+	};
+	
+	p.setMenu = function(menu) {
+		this.menu = menu;
 	};
 	
 	p.update = function(dt) {
@@ -47,7 +52,7 @@ app.GameObject = function () {
 			app.draw.text(ctx,"Currently Paused",100,100,20,'rgba(50,50,200,1)');
 		}
 		else if(this.states.MENU === this.world.currentState){
-			app.draw.text(ctx,"Currently In a Menu",100,100,20,'rgba(50,50,200,1)');
+			this.menu.render(ctx);
 		}
 	};
 
