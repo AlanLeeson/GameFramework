@@ -24,8 +24,23 @@ app.Main = {
 
 		this.loadedForces = [vec2.fromValues(0.15,0), vec2.fromValues(0,1)];
 		this.bounds = {width : this.canvas.width, height: this.canvas.height};
-		
+
 		this.gameObject = new app.GameObject();
+		this.gameObject.setCurrentState(this.gameObject.states.PLAY);
+
+		var keyboardController = new app.KeyboardController();
+		keyboardController.assignKeyAction(["r"], function(gameObject)
+		{
+			if(gameObject.getCurrentState() === gameObject.states.PLAY)
+			{
+				gameObject.setCurrentState("PAUSE");
+			}
+			else if(gameObject.getCurrentState() === gameObject.states.PAUSE)
+			{
+				gameObject.setCurrentState("PLAY");
+			}
+		}, true);
+		this.gameObject.setController(keyboardController);
 
 		this.world = new app.World(this.loadedForces);
 
@@ -78,14 +93,13 @@ app.Main = {
 			entity.applyWorldForces([vec2.fromValues(0, -2)]);
 		});
 
-
 		entityPlayer.setController(keyboardController);
 		this.world.addEntity(entityPlayer);
 
 		entityPlayer.setRemoveCondition(function(){
 			return false;
 		});
-		
+
 		this.gameObject.setWorld(this.world);
 
 		//call the game loop to start the game
