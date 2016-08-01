@@ -23,7 +23,7 @@ app.Main = {
 		this.canvas = document.querySelector('canvas');
 		this.ctx = this.canvas.getContext('2d');
 
-		this.loadedForces = [vec2.fromValues(0.15,0), vec2.fromValues(0,1)];
+		this.loadedForces = [vec2.fromValues(0,1)];
 		this.bounds = {width : this.canvas.width, height: this.canvas.height};
 
 		this.gameObject = new app.GameObject();
@@ -47,7 +47,7 @@ app.Main = {
 
 		var bounds = this.bounds;
 		this.world.setUpdateFunction(function(){
-			while(this.numEntities() < 100){
+			while(this.numEntities() < 50){
 				var entity =	new app.Entity(
 					bounds.width * Math.random(), 0,
 					Math.random() * 10 + 5,app.draw.randomRGBA(200,0,0.5), Math.random() * 20, "moveable");
@@ -86,20 +86,20 @@ app.Main = {
 		var keyboardController = new app.KeyboardController();
 		keyboardController.assignKeyAction([ "a", "ArrowLeft" ], function(entity)
 		{
-			entity.applyWorldForces([vec2.fromValues(-2, 0)]);
+			entity.applyWorldForces([vec2.fromValues(-1.5, 0)]);
 		});
 		keyboardController.assignKeyAction([ "d", "ArrowRight" ], function(entity)
 		{
-			entity.applyWorldForces([vec2.fromValues(2, 0)]);
+			entity.applyWorldForces([vec2.fromValues(1.5, 0)]);
 		});
-		keyboardController.assignKeyAction([ "s", "ArrowDown" ], function(entity)
+		keyboardController.assignKeyUpAction([ "a", "ArrowLeft", "d", "ArrowRight" ], function(entity)
 		{
-			entity.applyWorldForces([vec2.fromValues(0, 2)]);
+			entity.applyWorldForces([vec2.fromValues(0, -20)]);
 		});
 		keyboardController.assignKeyAction([ "w", "ArrowUp" ], function(entity)
 		{
-			entity.applyWorldForces([vec2.fromValues(0, -2)]);
-		});
+			entity.applyWorldForces([vec2.fromValues(0, -20)]);
+		}, true);
 
 		entityPlayer.setController(keyboardController);
 		this.world.addEntity(entityPlayer);

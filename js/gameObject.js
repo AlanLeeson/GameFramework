@@ -41,9 +41,9 @@ app.GameObject = function () {
 	};
 	
 	p.update = function(dt) {
-			if(this.controller !== null){
-				this.controller.update(this);
-			}
+		if(this.controller !== null){
+			this.controller.update(this);
+		}
 
 		if(this.states.PLAY === this.world.currentState){
 			this.world.update(dt);
