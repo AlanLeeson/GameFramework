@@ -16,11 +16,15 @@ app.Main = {
 
 	//var used for finding dt
 	updatedTime : 0,
+	ratio : undefined,
 
 	init : function(){
 
 		//assign the canvas and the canvas context
+		this.ratio = 400/400;
 		this.canvas = document.querySelector('canvas');
+		this.canvas.style.width = window.innerWidth + 'px';
+        this.canvas.style.height = (window.innerHeight * this.ratio) + 'px';
 		this.ctx = this.canvas.getContext('2d');
 
 		this.loadedForces = [vec2.fromValues(0,1)];
@@ -69,16 +73,16 @@ app.Main = {
 		/*** Initialize entities ***/
 		this.sprite = new app.Sprite('spriteExample.png', [0, 0], [15.875, 16], 10, [0, 1, 2, 3, 4, 5, 6, 7]);
 
-		var entity = new app.Entity(50, 50, 20, 'rgba(255,0,0,1)', 0, "stationary");
+		var entity = new app.Entity(this.bounds["width"]/6, 50, 40, 'rgba(255,0,0,1)', 0, "stationary");
 		this.world.addEntity(entity);
 
-		var entity = new app.Entity(150, 50, 20, 'rgba(0,255,0,1)', 0, "stationary");
+		var entity = new app.Entity(this.bounds["width"]*3/8, 50, 40, 'rgba(0,255,0,1)', 0, "stationary");
 		this.world.addEntity(entity);
 
-		var entity = new app.Entity(350, 50, 20, 'rgba(0,0,255,1)', 0, "stationary");
+		var entity = new app.Entity(this.bounds["width"]*5/8, 50, 40, 'rgba(0,0,255,1)', 0, "stationary");
 		this.world.addEntity(entity);
 
-		var entity = new app.Entity(250, 50, 20, 'rgba(255,255,0,1)', 0, "stationary");
+		var entity = new app.Entity(this.bounds["width"]*5/6, 50, 40, 'rgba(255,255,0,1)', 0, "stationary");
 		this.world.addEntity(entity);
 
 		var entityPlayer = new app.PlayerEntity(this.bounds["width"] / 2, this.bounds["height"] / 2, 20, 'rgba(255,0,0,1)', 0, "moveable");
@@ -94,11 +98,15 @@ app.Main = {
 		});
 		keyboardController.assignKeyUpAction([ "a", "ArrowLeft", "d", "ArrowRight" ], function(entity)
 		{
-			entity.applyWorldForces([vec2.fromValues(0, -20)]);
+			if(entity.velocity[1] >= 0) {
+				entity.applyWorldForces([vec2.fromValues(0, -20)]);
+			}
 		});
 		keyboardController.assignKeyAction([ "w", "ArrowUp" ], function(entity)
 		{
-			entity.applyWorldForces([vec2.fromValues(0, -20)]);
+			if(entity.velocity[1] >= 0) {
+				entity.applyWorldForces([vec2.fromValues(0, -20)]);
+			}
 		}, true);
 
 		entityPlayer.setController(keyboardController);
@@ -124,7 +132,7 @@ app.Main = {
 
 	//renders all objects in the game
 	render : function(ctx){
-		app.draw.rect(ctx,0,0,this.canvas.width,this.canvas.height,"#aaa");
+		app.draw.rect(ctx,0,0,this.canvas.width,this.canvas.height,"#eee");
 		this.gameObject.render(ctx);
 		this.sprite.render(ctx);
 	},
@@ -149,6 +157,6 @@ app.Main = {
 
 	clamp : function(val,min,max){
 		return Math.max(min,Math.min(max,val));
-	},
+	}
 
 };

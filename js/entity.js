@@ -67,17 +67,17 @@ app.Entity = function(){
 			case 'moveable' :
 				var speed = this.movementSpeed * dt;
 
-				if((this.location[0] + this.radius) >= 400){
+				if((this.location[0] + this.radius) >= app.Main.bounds["width"]){
 					this.velocity[0] *= -speed;
-					this.location[0] = 400 - this.radius;
+					this.location[0] = app.Main.bounds["width"] - this.radius;
 				}
 				if((this.location[0] - this.radius) <= 0){
 					this.velocity[0] *= -speed;
 					this.location[0] = 0 + this.radius;
 				}
-				if((this.location[1] + this.radius) > 480){
+				if((this.location[1] + this.radius) > app.Main.bounds["height"]){
 					this.velocity[1] *= -speed;
-					this.location[1] = 480 - this.radius;
+					this.location[1] = app.Main.bounds["height"] - this.radius;
 				}
 				if((this.location[1] - this.radius) <= 0){
 					this.velocity[1] *= -speed;
