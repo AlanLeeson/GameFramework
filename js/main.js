@@ -89,17 +89,15 @@ app.Main = {
 		var keyboardController = new app.KeyboardController();
 		keyboardController.assignKeyAction([ "a", "ArrowLeft" ], function(entity)
 		{
-			entity.applyWorldForces([vec2.fromValues(-1.5, 0)]);
+			entity.moveLeft([vec2.fromValues(-1.5, 0)]);
 		});
 		keyboardController.assignKeyAction([ "d", "ArrowRight" ], function(entity)
 		{
-			entity.applyWorldForces([vec2.fromValues(1.5, 0)]);
+			entity.moveRight([vec2.fromValues(1.5, 0)]);
 		});
 		keyboardController.assignKeyUpAction([ "a", "ArrowLeft", "d", "ArrowRight" ], function(entity)
 		{
-			if(entity.velocity[1] >= 0) {
-				entity.applyWorldForces([vec2.fromValues(0, -20)]);
-			}
+			entity.stopRightLeft();	
 		});
 		keyboardController.assignKeyAction([ "w", "ArrowUp" ], function(entity)
 		{
