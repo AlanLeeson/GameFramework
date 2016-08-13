@@ -12,7 +12,7 @@ app.Entity = function(){
 		this.velocity = vec2.create();
 		this.acceleration = vec2.create();
 		this.movementSpeed = mass;
-
+		this.sprite = null;
 		this.controller = null;
 
 		this.removeCondition = null;
@@ -30,6 +30,10 @@ app.Entity = function(){
 
 	p.addUpdateListener = function(listener){
 		this.listeners.push(listener);
+	}
+	
+	p.setSprite = function(sprite){
+		this.sprite = sprite;
 	}
 
 	p.getLocation = function(){
@@ -62,22 +66,25 @@ app.Entity = function(){
 		if(this.controller !== null){
 			this.controller.update(this);
 		}
+		if(this.sprite !== null){		
+			this.sprite.update(dt);
+		}
 
 		switch(this.type) {
 			case 'moveable' :
 				var speed = this.movementSpeed * dt;
 
-				if((this.location[0] + this.radius) >= 400){
+				if((this.location[0] + this.radius) >= app.Main.bounds["width"]){
 					this.velocity[0] *= -speed;
-					this.location[0] = 400 - this.radius;
+					this.location[0] = app.Main.bounds["width"] - this.radius;
 				}
 				if((this.location[0] - this.radius) <= 0){
 					this.velocity[0] *= -speed;
 					this.location[0] = 0 + this.radius;
 				}
-				if((this.location[1] + this.radius) > 480){
+				if((this.location[1] + this.radius) > app.Main.bounds["height"]){
 					this.velocity[1] *= -speed;
-					this.location[1] = 480 - this.radius;
+					this.location[1] = app.Main.bounds["height"] - this.radius;
 				}
 				if((this.location[1] - this.radius) <= 0){
 					this.velocity[1] *= -speed;
@@ -96,6 +103,7 @@ app.Entity = function(){
 	};
 
 	p.render = function(ctx){
+		if(this.sprite != null){this.sprite.render(ctx, this.location); }
 		app.draw.polygon(ctx,this.location[0],this.location[1],this.radius,8,this.col);
 	};
 
