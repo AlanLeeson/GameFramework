@@ -26,6 +26,12 @@ app.PlayerEntity = function(){
   p.stopRightLeft = function(){
   	this.velocity[0] = this.velocity[0] / 10;
   }
+  
+  p.jump = function(){
+  	if(this.velocity[1] >= 0) {
+		this.applyWorldForces([vec2.fromValues(0, -20)]);
+	}
+  }
 
   return PlayerEntity;
 }();

@@ -45,7 +45,8 @@ app.Menu = function(){
 
 	p.render = function(ctx){
 		if (this.backgroundSprite != undefined) {
-			this.backgroundSprite.render(ctx);
+			this.backgroundSprite.render(ctx, app.Main.bounds);
+			console.log(this.backgroundSprite);
 		}
 		app.draw.text(ctx,this.title,100,50,30,'rgba(50,50,50,1)');
 	};
