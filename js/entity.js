@@ -12,7 +12,7 @@ app.Entity = function(){
 		this.velocity = vec2.create();
 		this.acceleration = vec2.create();
 		this.movementSpeed = mass;
-
+		this.sprite = null;
 		this.controller = null;
 
 		this.removeCondition = null;
@@ -30,6 +30,10 @@ app.Entity = function(){
 
 	p.addUpdateListener = function(listener){
 		this.listeners.push(listener);
+	}
+	
+	p.setSprite = function(sprite){
+		this.sprite = sprite;
 	}
 
 	p.getLocation = function(){
@@ -61,6 +65,9 @@ app.Entity = function(){
 	p.update = function(dt){
 		if(this.controller !== null){
 			this.controller.update(this);
+		}
+		if(this.sprite !== null){		
+			this.sprite.update(dt);
 		}
 
 		switch(this.type) {
@@ -96,6 +103,7 @@ app.Entity = function(){
 	};
 
 	p.render = function(ctx){
+		if(this.sprite != null){this.sprite.render(ctx, this.location); }
 		app.draw.polygon(ctx,this.location[0],this.location[1],this.radius,8,this.col);
 	};
 

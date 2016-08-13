@@ -59,6 +59,7 @@ app.Main = {
 				entity.setRemoveCondition(function(){
 					return this.getLocation()[1] + this.getRadius() >= bounds["height"];
 				});
+				entity.setSprite(new app.Sprite('spriteExample.png', [0, 0], [15.875, 16], 10, [0, 1, 2, 3, 4, 5, 6, 7]));
 
 				this.addEntity(entity);
 			}
@@ -70,9 +71,7 @@ app.Main = {
 		this.menu.addTitle("MENU TITLE");
 		this.gameObject.setMenu(this.menu);
 
-		/*** Initialize entities ***/
-		this.sprite = new app.Sprite('spriteExample.png', [0, 0], [15.875, 16], 10, [0, 1, 2, 3, 4, 5, 6, 7]);
-
+		/*** Initialize entities ***/		
 		var entity = new app.Entity(this.bounds["width"]/6, 50, 40, 'rgba(255,0,0,1)', 0, "stationary");
 		this.world.addEntity(entity);
 
@@ -134,7 +133,6 @@ app.Main = {
 	render : function(ctx){
 		app.draw.rect(ctx,0,0,this.canvas.width,this.canvas.height,"#eee");
 		this.gameObject.render(ctx);
-		this.sprite.render(ctx);
 	},
 
 	//updates the objects in the game
@@ -143,7 +141,6 @@ app.Main = {
 		var dt  = this.calculateDeltaTime();
 
 		this.gameObject.update(dt);
-		this.sprite.update(dt);
 	},
 
 	calculateDeltaTime : function(){

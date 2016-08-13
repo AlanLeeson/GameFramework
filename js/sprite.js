@@ -21,10 +21,15 @@ app.Sprite = function(){
     	this._index += this.speed*dt;
 	};
 	
-	p.render = function(ctx) {
+	p.setLocation = function(location) {
+		this.location = location;
+	};
+	
+	p.render = function(ctx, location) {
 		if(!resources.get(this.url)) {return; }
 		var frame;
 
+		var center = vec2.fromValues(location[0]-(this.size[0]/2), location[1] - (this.size[1]/2));
 		if(this.speed > 0) {
 			var max = this.frames.length;
 			var idx = Math.floor(this._index);
@@ -44,7 +49,7 @@ app.Sprite = function(){
 		} else {
 			x += frame * this.size[0];
 		}
-		ctx.drawImage(resources.get(this.url), x, y, this.size[0], this.size[1], 0, 0, this.size[0], this.size[1]);
+		ctx.drawImage(resources.get(this.url), x, y, this.size[0], this.size[1], center[0], center[1], this.size[0], this.size[1]);
 	}
 
 	return Sprite;
