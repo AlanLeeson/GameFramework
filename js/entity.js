@@ -12,6 +12,7 @@ app.Entity = function(){
 		this.velocity = vec2.create();
 		this.acceleration = vec2.create();
 		this.movementSpeed = mass;
+		this.maxVelocity = vec2.fromValues(5,5);
 		this.sprite = null;
 		this.controller = null;
 
@@ -69,7 +70,7 @@ app.Entity = function(){
 		if(this.sprite !== null){		
 			this.sprite.update(dt);
 		}
-
+		
 		switch(this.type) {
 			case 'moveable' :
 				var speed = this.movementSpeed * dt;
