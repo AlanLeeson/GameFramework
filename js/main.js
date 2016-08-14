@@ -9,7 +9,6 @@ app.Main = {
 
 	loadedForces : undefined,
 	world : undefined,
-	sprite: undefined,
 	bounds : undefined,
 	gameObject : undefined,
 	menu : undefined,
@@ -20,19 +19,19 @@ app.Main = {
 
 	init : function(){
 
-		//assign the canvas and the canvas context
+		/*** Assign the canvas and the canvas context ***/
 		this.ratio = 400/400;
 		this.canvas = document.querySelector('canvas');
 		this.canvas.style.width = window.innerWidth + 'px';
         this.canvas.style.height = (window.innerHeight * this.ratio) + 'px';
 		this.ctx = this.canvas.getContext('2d');
 
-		this.loadedForces = [vec2.fromValues(0,1)];
+		/*** Set up the game object which holds game logic and states. ***/
 		this.bounds = {width : this.canvas.width, height: this.canvas.height};
-
 		this.gameObject = new app.GameObject();
 		this.gameObject.setCurrentState(this.gameObject.states.PLAY);
 
+		/*** Set up a generic keyboard controller to handle customizable inputs ***/
 		var keyboardController = new app.KeyboardController();
 		keyboardController.assignKeyAction(["r"], function(gameObject)
 		{
@@ -45,15 +44,33 @@ app.Main = {
 				gameObject.setCurrentState("PLAY");
 			}
 		}, true);
+		keyboardController.assignKeyAction(["m"], function(gameObject)
+		{
+			if(gameObject.getCurrentState() === gameObject.states.PLAY)
+			{
+				gameObject.setCurrentState("MENU");
+			}
+			else if(gameObject.getCurrentState() === gameObject.states.MENU)
+			{
+				gameObject.setCurrentState("PLAY");
+			}
+		}, true);
 		this.gameObject.setController(keyboardController);
 
-		this.world = new app.World(this.loadedForces);
+		/*** Initialize menu ***/
+		this.menu = new app.Menu();
+		this.menu.addBackgroundSprite(new app.Sprite('menuBackground.jpg', [0, 0], [this.bounds.width, this.bounds.height], 0));
+		this.menu.addTitle("MENU TITLE");
+		this.gameObject.setMenu(this.menu);
 
+		/*** Initialize world and its conditions ***/
+		this.loadedForces = [vec2.fromValues(0,1)];
+		this.world = new app.World(this.loadedForces);
 		var bounds = this.bounds;
 		this.world.setUpdateFunction(function(){
 			while(this.numEntities() < 50){
 				var entity =	new app.Entity(
-					bounds.width * Math.random(), 0,
+					bounds['width'] * Math.random(), 0,
 					Math.random() * 10 + 5,app.draw.randomRGBA(200,0,0.5), Math.random() * 20, "moveable");
 
 				entity.setRemoveCondition(function(){
@@ -64,28 +81,20 @@ app.Main = {
 				this.addEntity(entity);
 			}
 		});
-		
-		/*** Initialize menu ***/
-		this.menu = new app.Menu();
-		this.menu.addBackgroundSprite(new app.Sprite('menuBackground.jpg', [0, 0], [this.bounds.width, this.bounds.height], 0));
-		this.menu.addTitle("MENU TITLE");
-		this.gameObject.setMenu(this.menu);
 
 		/*** Initialize entities ***/		
 		var entity = new app.Entity(this.bounds["width"]/6, 50, 40, 'rgba(255,0,0,1)', 0, "stationary");
 		this.world.addEntity(entity);
-
-		var entity = new app.Entity(this.bounds["width"]*3/8, 50, 40, 'rgba(0,255,0,1)', 0, "stationary");
+		entity = new app.Entity(this.bounds["width"]*3/8, 50, 40, 'rgba(0,255,0,1)', 0, "stationary");
 		this.world.addEntity(entity);
-
-		var entity = new app.Entity(this.bounds["width"]*5/8, 50, 40, 'rgba(0,0,255,1)', 0, "stationary");
+		entity = new app.Entity(this.bounds["width"]*5/8, 50, 40, 'rgba(0,0,255,1)', 0, "stationary");
 		this.world.addEntity(entity);
-
-		var entity = new app.Entity(this.bounds["width"]*5/6, 50, 40, 'rgba(255,255,0,1)', 0, "stationary");
+		entity = new app.Entity(this.bounds["width"]*5/6, 50, 40, 'rgba(255,255,0,1)', 0, "stationary");
 		this.world.addEntity(entity);
 
 		var entityPlayer = new app.PlayerEntity(this.bounds["width"] / 2, this.bounds["height"] / 2, 20, 'rgba(255,0,0,1)', 0, "moveable");
-
+		
+		/*** Create a keyboard controller to handle player actions ***/
 		var keyboardController = new app.KeyboardController();
 		keyboardController.assignKeyAction([ "a", "ArrowLeft" ], function(entity)
 		{
@@ -101,18 +110,13 @@ app.Main = {
 		});
 		keyboardController.assignKeyAction([ "w", "ArrowUp" ], function(entity)
 		{
-			if(entity.velocity[1] >= 0) {
-				entity.applyWorldForces([vec2.fromValues(0, -20)]);
-			}
+			entity.jump();
 		}, true);
-
 		entityPlayer.setController(keyboardController);
+		entityPlayer.setRemoveCondition(function(){return false;});
+		
+		/*** Finish setting the world and game object ***/
 		this.world.addEntity(entityPlayer);
-
-		entityPlayer.setRemoveCondition(function(){
-			return false;
-		});
-
 		this.gameObject.setWorld(this.world);
 
 		//call the game loop to start the game
@@ -141,6 +145,7 @@ app.Main = {
 		this.gameObject.update(dt);
 	},
 
+	//calculate delta time to maintain a frame rate
 	calculateDeltaTime : function(){
 		var now, fps;
 		now = (+new Date);
@@ -150,6 +155,7 @@ app.Main = {
 		return 1/fps;
 	},
 
+	//helper function to stop values from exceeding bounds
 	clamp : function(val,min,max){
 		return Math.max(min,Math.min(max,val));
 	}

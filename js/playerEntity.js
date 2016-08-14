@@ -26,6 +26,17 @@ app.PlayerEntity = function(){
   p.stopRightLeft = function(){
   	this.velocity[0] = this.velocity[0] / 10;
   }
+  
+  p.jump = function(){
+  	if(this.velocity[1] >= 0) {
+		this.applyWorldForces([vec2.fromValues(0, -20)]);
+	}
+  }
+  
+  p.render = function(ctx){
+  	if(this.sprite != null){this.sprite.render(ctx, this.location); }
+	app.draw.polygon(ctx,this.location[0],this.location[1],this.radius,4,this.col);
+  }
 
   return PlayerEntity;
 }();
