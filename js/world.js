@@ -6,13 +6,13 @@ app.World = function(){
 
 	var World = function(forces){
 		this.type = "world";
-
+		
 		this.forces = forces;
-
+		
     	this.entities = [];
 
 		this.updateFunction = null;
-
+		
 		this.currentState = 0;
 	};
 
@@ -70,8 +70,6 @@ app.World = function(){
 		{
 			var entity = this.entities[i];
 
-			var currentLocation = entity.getLocation();
-
 			entity.applyWorldForces(this.forces);
 
 			if(entity.canRemove()){
@@ -89,19 +87,6 @@ app.World = function(){
 						this.entities[j].applyWorldForces([inverse]);
 					}
 				}
-			} else if(entity.type == "moveable") {
-				var possibleCollisions = this.getPossibleCollidingObjects(entity);
-				for(var j = 0; j < possibleCollisions.length; j++){
-					var _entity = possibleCollisions[j];
-					if(this.circleCollision(entity.getLocation(), _entity.getLocation(), entity.radius, _entity.radius)){
-						if(entity instanceof app.PlayerEntity){
-
-						} else {
-							var inverse = vec2.multiplyByScalar(vec2.inverse(entity.velocity), 4);
-							entity.applyWorldForces([inverse]);
-						}
-					}
-				}
 			}
 
 			entity.update(dt);
@@ -114,32 +99,6 @@ app.World = function(){
 			this.entities[i].render(ctx);
 		}
     };
-
-		p.getPossibleCollidingObjects = function(entity){
-			var possibleCollisions = [];
-
-			var range_x = Math.abs(entity.velocity[0] * 5);
-			var range_y = Math.abs(entity.velocity[1] * 5);
-
-			if(range_x != 0 || range_y != 0){
-				for(var i = 0; i < this.entities.length; i++)
-				{
-					var _entity = this.entities[i];
-
-					if(_entity == entity){
-						continue;
-					}
-
-					if((_entity.getLocation()[0] <= entity.getLocation()[0] + range_x &&
-					  	_entity.getLocation()[0] >= entity.getLocation()[0] - range_x) ||
-					 		(_entity.getLocation()[1] <= entity.getLocation()[1] + range_y &&
-					 		_entity.getLocation()[1] >= entity.getLocation()[1] - range_y)){
-								possibleCollisions.push(_entity);
-					}
-				}
-			}
-			return possibleCollisions;
-		}
 
     p.circleCollision = function(loc1, loc2, radius1, radius2){
 		var dx = loc1[0] - loc2[0];
