@@ -82,18 +82,8 @@ app.Main = {
 			}
 		});
 
-		/*** Initialize entities ***/		
-		var entity = new app.Entity(this.bounds["width"]/6, 50, 40, 'rgba(255,0,0,1)', 0, "stationary");
-		this.world.addEntity(entity);
-		entity = new app.Entity(this.bounds["width"]*3/8, 50, 40, 'rgba(0,255,0,1)', 0, "stationary");
-		this.world.addEntity(entity);
-		entity = new app.Entity(this.bounds["width"]*5/8, 50, 40, 'rgba(0,0,255,1)', 0, "stationary");
-		this.world.addEntity(entity);
-		entity = new app.Entity(this.bounds["width"]*5/6, 50, 40, 'rgba(255,255,0,1)', 0, "stationary");
-		this.world.addEntity(entity);
-
 		var entityPlayer = new app.PlayerEntity(this.bounds["width"] / 2, this.bounds["height"] / 2, 20, 'rgba(255,0,0,1)', 0, "moveable");
-		
+
 		/*** Create a keyboard controller to handle player actions ***/
 		var keyboardController = new app.KeyboardController();
 		keyboardController.assignKeyAction([ "a", "ArrowLeft" ], function(entity)
@@ -106,7 +96,7 @@ app.Main = {
 		});
 		keyboardController.assignKeyUpAction([ "a", "ArrowLeft", "d", "ArrowRight" ], function(entity)
 		{
-			entity.stopRightLeft();	
+			entity.stopRightLeft();
 		});
 		keyboardController.assignKeyAction([ "w", "ArrowUp" ], function(entity)
 		{
@@ -114,7 +104,7 @@ app.Main = {
 		}, true);
 		entityPlayer.setController(keyboardController);
 		entityPlayer.setRemoveCondition(function(){return false;});
-		
+
 		/*** Finish setting the world and game object ***/
 		this.world.addEntity(entityPlayer);
 		this.gameObject.setWorld(this.world);
