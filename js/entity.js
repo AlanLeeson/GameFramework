@@ -16,6 +16,8 @@ app.Entity = function(){
 		this.sprite = null;
 		this.controller = null;
 
+		this.previousLocaiton = null;
+
 		this.removeCondition = null;
 
 		this.listeners = [];
@@ -32,9 +34,13 @@ app.Entity = function(){
 	p.addUpdateListener = function(listener){
 		this.listeners.push(listener);
 	}
-	
+
 	p.setSprite = function(sprite){
 		this.sprite = sprite;
+	}
+
+	p.setLocation = function(location){
+		this.location = vec2.clone(location);
 	}
 
 	p.getLocation = function(){
@@ -67,10 +73,10 @@ app.Entity = function(){
 		if(this.controller !== null){
 			this.controller.update(this);
 		}
-		if(this.sprite !== null){		
+		if(this.sprite !== null){
 			this.sprite.update(dt);
 		}
-		
+
 		switch(this.type) {
 			case 'moveable' :
 				var speed = this.movementSpeed * dt;

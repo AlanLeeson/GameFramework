@@ -69,8 +69,7 @@ app.World = function(){
     	for(var i = this.entities.length - 1; i >= 0; i--)
 		{
 			var entity = this.entities[i];
-
-			var currentLocation = entity.getLocation();
+						entity.previousLocation = vec2.clone(entity.getLocation());
 
 			entity.applyWorldForces(this.forces);
 
@@ -79,6 +78,8 @@ app.World = function(){
 				continue;
 			}
 
+			var collision;
+
 			if(entity.type == "stationary"){
 				for(var j = 0; j < this.entities.length; j++)
 				{
@@ -86,25 +87,38 @@ app.World = function(){
 						this.circleCollision(this.entities[j].location, entity.location,
 						 this.entities[j].radius, this.entities[i].radius)){
 						var inverse = vec2.multiplyByScalar(vec2.inverse(this.entities[j].velocity), 2);
-						this.entities[j].applyWorldForces([inverse]);
+						this.entities[j].applyForce(inverse);
 					}
 				}
 			} else if(entity.type == "moveable") {
 				var possibleCollisions = this.getPossibleCollidingObjects(entity);
 				for(var j = 0; j < possibleCollisions.length; j++){
 					var _entity = possibleCollisions[j];
-					if(this.circleCollision(entity.getLocation(), _entity.getLocation(), entity.radius, _entity.radius)){
-						if(entity instanceof app.PlayerEntity){
 
-						} else {
-							var inverse = vec2.multiplyByScalar(vec2.inverse(entity.velocity), 4);
-							entity.applyWorldForces([inverse]);
+
+					if(this.circleCollision(entity.getLocation(), _entity.getLocation(), entity.radius, _entity.radius)){
+						if(!(entity instanceof app.PlayerEntity)){
+							var inverse = vec2.inverse(entity.velocity);
+							var collisionForce = vec2.create();
+
+							if(entity.previousLocation !== null)
+								entity.setLocation(vec2.clone(entity.previousLocation));
+
+							collision = true;
+
+							vec2.add(collisionForce, inverse, _entity.velocity);
+
+							entity.velocity = vec2.create();
+
+							entity.applyForce(vec2.multiplyByScalar(entity.acceleration, -1));
+							entity.applyForce(vec2.multiplyByScalar(collisionForce, 1.5));
 						}
 					}
 				}
 			}
 
-			entity.update(dt);
+				entity.previousLocation = vec2.clone(entity.getLocation());
+				entity.update(dt);
 		}
     };
 

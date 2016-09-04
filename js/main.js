@@ -64,14 +64,14 @@ app.Main = {
 		this.gameObject.setMenu(this.menu);
 
 		/*** Initialize world and its conditions ***/
-		this.loadedForces = [vec2.fromValues(0,1)];
+		this.loadedForces = [vec2.fromValues(0,0.7)];
 		this.world = new app.World(this.loadedForces);
 		var bounds = this.bounds;
 		this.world.setUpdateFunction(function(){
-			while(this.numEntities() < 50){
+			while(this.numEntities() < 2){
 				var entity =	new app.Entity(
-					bounds['width'] * Math.random(), 0,
-					Math.random() * 10 + 5,app.draw.randomRGBA(200,0,0.5), Math.random() * 20, "moveable");
+					bounds['width'] / 2, 0,
+					Math.random() * 10 + 5,app.draw.randomRGBA(200,0,0.5), 20, "moveable");
 
 				entity.setRemoveCondition(function(){
 					return this.getLocation()[1] + this.getRadius() >= bounds["height"];
