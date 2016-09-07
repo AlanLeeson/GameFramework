@@ -104,7 +104,7 @@ app.Main = {
 		}, true);
 		keyboardController.assignKeyAction([ " " ], function(entity)
 		{
-			entity.col = entity.col == "#ff0" ? "#f00" : "#ff0";
+			entity.form == entity.forms.THROW ? entity.changeForm("CATCH") : entity.changeForm("THROW");
 		}, true)
 		entityPlayer.setController(keyboardController);
 		entityPlayer.setRemoveCondition(function(){return false;});
