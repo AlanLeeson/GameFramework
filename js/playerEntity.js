@@ -34,8 +34,11 @@ app.PlayerEntity = function(){
   }
   
   p.render = function(ctx){
-  	if(this.sprite != null){this.sprite.render(ctx, this.location); }
-	app.draw.polygon(ctx,this.location[0],this.location[1],this.radius,4,this.col);
+  	if(this.sprite != null){
+  		this.sprite.render(ctx, this.location); 
+  	} else {
+		app.draw.polygon(ctx,this.location[0],this.location[1],this.radius,4,this.col);
+	}
   }
 
   return PlayerEntity;

@@ -102,6 +102,10 @@ app.Main = {
 		{
 			entity.jump();
 		}, true);
+		keyboardController.assignKeyAction([ " " ], function(entity)
+		{
+			entity.col = entity.col == "#ff0" ? "#f00" : "#ff0";
+		}, true)
 		entityPlayer.setController(keyboardController);
 		entityPlayer.setRemoveCondition(function(){return false;});
 
