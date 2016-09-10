@@ -120,6 +120,8 @@ app.Entity = function(){
 
 				break;
 			case 'stationary' :
+				this.velocity = vec2.create();
+				this.acceleration = vec2.create();
 				break;
 
 		}
