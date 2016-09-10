@@ -52,7 +52,7 @@ app.PlayerEntity = function(){
   	if(this.sprite != null){
   		this.sprite.render(ctx, this.location);
   	} else {
-      app.draw.polygon(ctx,this.location[0],this.location[1],this.radius,4,this.col);
+      app.draw.opaqueCircle(ctx,this.location[0],this.location[1],this.radius,this.col);
     }
   }
 

@@ -68,7 +68,7 @@ app.Main = {
 		this.world = new app.World(this.loadedForces);
 		var bounds = this.bounds;
 		this.world.setUpdateFunction(function(){
-			while(this.numEntities() < 6){
+			while(this.numEntities() < 50){
 				var entity =	new app.Entity(
 					bounds['width'] * Math.random(), 0,
 					Math.random() * 10 + 5,app.draw.randomRGBA(200,0,0.5), 20, "moveable");
@@ -76,15 +76,6 @@ app.Main = {
 				entity.setRemoveCondition(function(){
 					return this.getLocation()[1] + this.getRadius() >= bounds["height"];
 				});
-
-				entity.setCollisionResolution(function(_entity){
-					if(this.velocity[0] == 0 && this.velocity[1] == 0 &&
-						_entity.velocity[0] == 0 && _entity.velocity[1] == 0)
-						{
-							this.remove = true;
-						}
-				});
-
 				entity.setSprite(new app.Sprite('spriteExample.png', [0, 0], [15.875, 16], 10, [0, 1, 2, 3, 4, 5, 6, 7]));
 
 				this.addEntity(entity);
