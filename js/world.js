@@ -78,25 +78,14 @@ app.World = function(){
 				continue;
 			}
 
-			var collision;
-
-			if(entity.type == "stationary"){
-				for(var j = 0; j < this.entities.length; j++)
-				{
-					if(this.entities[j].type == "moveable" &&
-						this.circleCollision(this.entities[j].location, entity.location,
-						 this.entities[j].radius, this.entities[i].radius)){
-						var inverse = vec2.multiplyByScalar(vec2.inverse(this.entities[j].velocity), 2);
-						this.entities[j].applyForce(inverse);
-					}
-				}
-			} else if(entity.type == "moveable") {
+			if(entity.type == "moveable") {
 				var possibleCollisions = this.getPossibleCollidingObjects(entity);
 				for(var j = 0; j < possibleCollisions.length; j++){
 					var _entity = possibleCollisions[j];
 
+					var futureLocation = getFutureLocation(entity.velocity, entity.acceleration, entity.getLocation());
 
-					if(this.circleCollision(entity.getLocation(), _entity.getLocation(), entity.radius, _entity.radius)){
+					if(this.circleCollision(futureLocation, _entity.getLocation(), entity.radius, _entity.radius)){
 						if(!(entity instanceof app.PlayerEntity)){
 							var inverse = vec2.inverse(entity.velocity);
 							var collisionForce = vec2.create();
@@ -104,14 +93,14 @@ app.World = function(){
 							if(entity.previousLocation !== null)
 								entity.setLocation(vec2.clone(entity.previousLocation));
 
-							collision = true;
-
 							vec2.add(collisionForce, inverse, _entity.velocity);
 
 							entity.velocity = vec2.create();
-
-							entity.applyForce(vec2.multiplyByScalar(entity.acceleration, -1));
+							entity.acceleration = vec2.create();
 							entity.applyForce(vec2.multiplyByScalar(collisionForce, 1.5));
+
+							entity.triggerCollisionResolution(_entity);
+
 						}
 					}
 				}
@@ -132,8 +121,8 @@ app.World = function(){
 		p.getPossibleCollidingObjects = function(entity){
 			var possibleCollisions = [];
 
-			var range_x = Math.abs(entity.velocity[0] * 5);
-			var range_y = Math.abs(entity.velocity[1] * 5);
+			var range_x = Math.abs(entity.velocity[0] * 5 + entity.radius * 5);
+			var range_y = Math.abs(entity.velocity[1] * 5 + entity.radius * 5);
 
 			if(range_x != 0 || range_y != 0){
 				for(var i = 0; i < this.entities.length; i++)
