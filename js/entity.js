@@ -18,7 +18,9 @@ app.Entity = function(){
 
 		this.previousLocaiton = null;
 
+		this.remove = false;
 		this.removeCondition = null;
+		this.collisionResolution = null;
 
 		this.listeners = [];
 	};
@@ -62,11 +64,26 @@ app.Entity = function(){
 		this.removeCondition = removeCondition;
 	};
 
+	p.setCollisionResolution = function(collisionResolution){
+		this.updateEntityEvent();
+
+		this.collisionResolution = collisionResolution;
+	};
+
 	p.canRemove = function(){
-		if (this.removeCondition !== null) {
+
+		if(this.remove){
+			return true;
+		} else if (this.removeCondition !== null) {
 			return this.removeCondition();
 		} else
 			return false;
+	};
+
+	p.triggerCollisionResolution = function(_entity){
+		if(this.collisionResolution !== null) {
+			this.collisionResolution(_entity);
+		}
 	};
 
 	p.update = function(dt){
