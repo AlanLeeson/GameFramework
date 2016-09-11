@@ -76,6 +76,15 @@ app.Main = {
 				entity.setRemoveCondition(function(){
 					return this.getLocation()[1] + this.getRadius() >= bounds["height"];
 				});
+
+				entity.setCollisionResolution(function(_entity){
+ 					if(this.velocity[0] == 0 && this.velocity[1] == 0 &&
+ 						_entity.velocity[0] == 0 && _entity.velocity[1] == 0)
+ 					{
+ 						this.remove = true;
+ 					}
+ 				});
+				
 				entity.setSprite(new app.Sprite('spriteExample.png', [0, 0], [15.875, 16], 10, [0, 1, 2, 3, 4, 5, 6, 7]));
 
 				this.addEntity(entity);
