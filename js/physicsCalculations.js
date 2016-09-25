@@ -12,9 +12,26 @@ function updateLocation(velocity,acceleration,location){
 
 	vec2.add(velocity,velocity,acceleration);
 	//add velocity to location
+<<<<<<< HEAD
 	vec2.add(updatedLocation,location,velocity);
 
 	return updatedLocation;
+=======
+	vec2.add(location,location,velocity);
+	//Zero the acceleration
+	acceleration = vec2.create();
+}
+
+function getFutureLocation(velocity,acceleration,location){
+	var futureLocation = vec2.clone(location);
+
+	//add velocity to location
+	vec2.add(futureLocation,futureLocation,velocity);
+	//add acceleration to location
+	vec2.add(futureLocation,futureLocation,acceleration);
+
+	return futureLocation;
+>>>>>>> framework_example_game
 }
 
 

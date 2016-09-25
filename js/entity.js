@@ -18,7 +18,9 @@ app.Entity = function(){
 
 		this.applyCollisions = true;
 
+		this.remove = false;
 		this.removeCondition = null;
+		this.collisionResolution = null;
 
 		this.listeners = [];
 	};
@@ -72,8 +74,17 @@ app.Entity = function(){
 		this.removeCondition = removeCondition;
 	};
 
+	p.setCollisionResolution = function(collisionResolution){
+		this.updateEntityEvent();
+
+		this.collisionResolution = collisionResolution;
+	};
+
 	p.canRemove = function(){
-		if (this.removeCondition !== null) {
+
+		if(this.remove){
+			return true;
+		} else if (this.removeCondition !== null) {
 			return this.removeCondition();
 		} else
 			return false;
@@ -81,6 +92,10 @@ app.Entity = function(){
 
 	p.getFutureLocation = function(dt){
 		 return updateLocation(this.velocity,this.acceleration,this.location);
+	p.triggerCollisionResolution = function(_entity){
+		if(this.collisionResolution !== null) {
+			this.collisionResolution(_entity);
+		}
 	};
 
 	p.update = function(dt){
@@ -118,6 +133,8 @@ app.Entity = function(){
 
 				break;
 			case 'stationary' :
+				this.velocity = vec2.create();
+				this.acceleration = vec2.create();
 				break;
 
 		}

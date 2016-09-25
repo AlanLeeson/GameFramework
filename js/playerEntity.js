@@ -9,6 +9,8 @@ app.PlayerEntity = function(){
 
     this.applyCollisions = false;
     this.health = 1000;
+    this.forms = {"THROW" : 0, "CATCH" : 1};
+    this.form = this.forms.THROW;
   };
 
   PlayerEntity.prototype = Object.create(app.Entity.prototype);
@@ -35,9 +37,26 @@ app.PlayerEntity = function(){
 	}
   }
 
+
+  p.changeForm = function(form){
+    this.form = this.forms[form] != null ? this.forms[form] : this.form;
+    if(this.form == this.forms.THROW){
+      this.col = "#f00";
+      this.type = 'moveable';
+    } else if(this.form == this.forms.CATCH){
+      this.col = "#ff0";
+      this.type = 'stationary';
+      this.velocity = vec2.create();
+      this.acceleration = vec2.create();
+    }
+  }
+
   p.render = function(ctx){
-  	if(this.sprite != null){this.sprite.render(ctx, this.location); }
-	app.draw.polygon(ctx,this.location[0],this.location[1],this.radius,4,this.col);
+  	if(this.sprite != null){
+  		this.sprite.render(ctx, this.location);
+  	} else {
+      app.draw.opaqueCircle(ctx,this.location[0],this.location[1],this.radius,this.col);
+    }
   }
 
   return PlayerEntity;

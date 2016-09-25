@@ -84,6 +84,7 @@ app.World = function(){
 				for(var j = 0; j < possibleCollisions.length; j++){
 					var _entity = possibleCollisions[j];
 
+<<<<<<< HEAD
 					var futureLocation = entity.getFutureLocation();
 
 					if(this.circleCollision(futureLocation, _entity.getLocation(), entity.radius, _entity.radius)){
@@ -95,6 +96,8 @@ app.World = function(){
 						entity.velocity = vec2.create();
 
 						entity.applyForce(vec2.multiplyByScalar(collisionForce, 0.8));
+							entity.triggerCollisionResolution(_entity);
+						}
 					}
 				}
 			}
