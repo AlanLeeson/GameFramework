@@ -3,18 +3,18 @@
 var app = app || {};
 
 function applyForce(force,acceleration){
-	//divide the force by the mass
-	force = vec2.fromValues(force[0]/2,force[1]/2);
 	//add the force to acceleration
 	vec2.add(acceleration, acceleration, force);
 }
 
 function updateLocation(velocity,acceleration,location){
+	var updatedLocation = vec2.create();
+
 	vec2.add(velocity,velocity,acceleration);
 	//add velocity to location
-	vec2.add(location,location,velocity);
-	//Zero the acceleration
-	acceleration = vec2.create();
+	vec2.add(updatedLocation,location,velocity);
+
+	return updatedLocation;
 }
 
 function getFutureLocation(velocity,acceleration,location){
@@ -27,6 +27,8 @@ function getFutureLocation(velocity,acceleration,location){
 
 	return futureLocation;
 }
+
+
 
 function seek(location,targetLocation,velocity,maxSpeed,maxForce){
 	var desired = vec2.create();

@@ -16,7 +16,7 @@ app.Entity = function(){
 		this.sprite = null;
 		this.controller = null;
 
-		this.previousLocaiton = null;
+		this.applyCollisions = true;
 
 		this.remove = false;
 		this.removeCondition = null;
@@ -49,6 +49,16 @@ app.Entity = function(){
 		return this.location;
 	}
 
+	p.getWidth = function(){
+		//should be overridden/modified for support of more complex entities with different types
+		return this.radius;
+	}
+
+	p.getHeight = function(){
+		//should be overridden/modified for support of more complex entities with different types
+		return this.radius;
+	}
+
 	p.getRadius = function(){
 		return this.radius;
 	}
@@ -77,7 +87,11 @@ app.Entity = function(){
 		} else if (this.removeCondition !== null) {
 			return this.removeCondition();
 		} else
-			return false;
+		return false;
+	};
+
+	p.getFutureLocation = function(dt){
+		return updateLocation(this.velocity,this.acceleration,this.location);
 	};
 
 	p.triggerCollisionResolution = function(_entity){
@@ -90,59 +104,62 @@ app.Entity = function(){
 		if(this.controller !== null){
 			this.controller.update(this);
 		}
+
 		if(this.sprite !== null){
 			this.sprite.update(dt);
 		}
 
 		switch(this.type) {
 			case 'moveable' :
-				var speed = this.movementSpeed * dt;
+			var speed = this.movementSpeed * dt;
 
-				if((this.location[0] + this.radius) >= app.Main.bounds["width"]){
-					this.velocity[0] *= -speed;
-					this.location[0] = app.Main.bounds["width"] - this.radius;
-				}
-				if((this.location[0] - this.radius) <= 0){
-					this.velocity[0] *= -speed;
-					this.location[0] = 0 + this.radius;
-				}
-				if((this.location[1] + this.radius) > app.Main.bounds["height"]){
-					this.velocity[1] *= -speed;
-					this.location[1] = app.Main.bounds["height"] - this.radius;
-				}
-				if((this.location[1] - this.radius) <= 0){
-					this.velocity[1] *= -speed;
-					this.location[1] = 0 + this.radius;
-				}
+			if((this.location[0] + this.radius) >= app.Main.bounds["width"]){
+				this.velocity[0] *= -speed;
+				this.location[0] = app.Main.bounds["width"] - this.radius;
+			}
+			if((this.location[0] - this.radius) <= 0){
+				this.velocity[0] *= -speed;
+				this.location[0] = 0 + this.radius;
+			}
+			if((this.location[1] + this.radius) > app.Main.bounds["height"]){
+				this.velocity[1] *= -speed;
+				this.location[1] = app.Main.bounds["height"] - this.radius;
+			}
+			if((this.location[1] - this.radius) <= 0){
+				this.velocity[1] *= -speed;
+				this.location[1] = 0 + this.radius;
+			}
 
-				updateLocation(this.velocity,this.acceleration,this.location);
-				this.acceleration = vec2.create();
+			this.location = updateLocation(this.velocity,this.acceleration,this.location);
+			this.acceleration = vec2.create();
 
-				break;
+			break;
 			case 'stationary' :
-				this.velocity = vec2.create();
-				this.acceleration = vec2.create();
-				break;
+			this.velocity = vec2.create();
+			this.acceleration = vec2.create();
+			break;
 
 		}
 
 	};
 
 	p.render = function(ctx){
-		if(this.sprite != null){this.sprite.render(ctx, this.location); }
-		app.draw.polygon(ctx,this.location[0],this.location[1],this.radius,8,this.col);
-	};
+		if(this.sprite != null){
+			this.sprite.render(ctx, this.location);
+		}	else {
+			app.draw.polygon(ctx,this.location[0],this.location[1],this.radius,8,this.col); }
+		};
 
-	p.applyWorldForces = function(wolrdForces){
-		for(var i = 0; i < wolrdForces.length; i ++){
-			applyForce(wolrdForces[i], this.acceleration);
-		}
-	};
+		p.applyWorldForces = function(wolrdForces){
+			for(var i = 0; i < wolrdForces.length; i ++){
+				applyForce(wolrdForces[i], this.acceleration);
+			}
+		};
 
-	p.applyForce = function(force){
-		applyForce(force, this.acceleration);
-	};
+		p.applyForce = function(force){
+			applyForce(force, this.acceleration);
+		};
 
-	return Entity;
+		return Entity;
 
-}();
+	}();

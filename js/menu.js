@@ -21,15 +21,15 @@ app.Menu = function(){
 			this.listeners[i].doUpdateMenuEvent(this);
 		}
 	}
-	
+
 	p.addButton = function(button){
 		this.buttons.add(button);
 	};
-	
+
 	p.addTitle = function(title){
 		this.title = title;
 	};
-	
+
 	p.addBackgroundSprite = function(sprite){
 		this.backgroundSprite = sprite;
 	};
@@ -40,13 +40,12 @@ app.Menu = function(){
 	};
 
 	p.update = function(dt){
-		
+
 	};
 
 	p.render = function(ctx){
 		if (this.backgroundSprite != undefined) {
 			this.backgroundSprite.render(ctx, app.Main.bounds);
-			console.log(this.backgroundSprite);
 		}
 		app.draw.text(ctx,this.title,100,50,30,'rgba(50,50,50,1)');
 	};

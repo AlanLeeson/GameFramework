@@ -9,7 +9,7 @@ app.World = function(){
 
 		this.forces = forces;
 
-    	this.entities = [];
+		this.entities = [];
 
 		this.updateFunction = null;
 
@@ -18,58 +18,58 @@ app.World = function(){
 
 	var p = World.prototype;
 
-    p.getGravity = function(){
-        return this.gravity;
-    };
+	p.getGravity = function(){
+		return this.gravity;
+	};
 
-    p.getWind = function(){
-        return this.wind;
-    };
+	p.getWind = function(){
+		return this.wind;
+	};
 
-    p.getForces = function(){
-    	return this.forces;
-    };
+	p.getForces = function(){
+		return this.forces;
+	};
 
-    p.addForce = function(force){
-    	this.forces.push(force);
-    };
+	p.addForce = function(force){
+		this.forces.push(force);
+	};
 
-		p.setUpdateFunction = function(updateFunction){
-			this.updateFunction = updateFunction;
-		};
+	p.setUpdateFunction = function(updateFunction){
+		this.updateFunction = updateFunction;
+	};
 
-		p.doUpdateFunction = function(){
-			if (this.updateFunction !== null) {
-				return this.updateFunction();
-			}
-		};
+	p.doUpdateFunction = function(){
+		if (this.updateFunction !== null) {
+			return this.updateFunction();
+		}
+	};
 
-    p.addEntity = function(entity){
-				entity.addUpdateListener(this);
-        this.entities.push(entity);
-    };
+	p.addEntity = function(entity){
+		entity.addUpdateListener(this);
+		this.entities.push(entity);
+	};
 
-		p.updateEntityHandler = function(e) {
-			console.log(e.entity);
-		};
+	p.updateEntityHandler = function(e) {
+		console.log(e.entity);
+	};
 
-    p.getEntity = function(i){
-        return this.entities[i];
-    };
+	p.getEntity = function(i){
+		return this.entities[i];
+	};
 
-    p.numEntities = function(){
-        return this.entities.length;
-    };
+	p.numEntities = function(){
+		return this.entities.length;
+	};
 
-		p.doUpdateEntityEvent = function(entity){
-				console.log(entity);
-		};
+	p.doUpdateEntityEvent = function(entity){
+		console.log(entity);
+	};
 
-    p.update = function(dt){
-    	for(var i = this.entities.length - 1; i >= 0; i--)
+	p.update = function(dt){
+		for(var i = this.entities.length - 1; i >= 0; i--)
 		{
 			var entity = this.entities[i];
-						entity.previousLocation = vec2.clone(entity.getLocation());
+			var updateLocation = true;
 
 			entity.applyWorldForces(this.forces);
 
@@ -78,73 +78,65 @@ app.World = function(){
 				continue;
 			}
 
-			if(entity.type == "moveable") {
+			if(entity.type == "moveable" && entity.applyCollisions) {
+
 				var possibleCollisions = this.getPossibleCollidingObjects(entity);
 				for(var j = 0; j < possibleCollisions.length; j++){
 					var _entity = possibleCollisions[j];
 
-					var futureLocation = getFutureLocation(entity.velocity, entity.acceleration, entity.getLocation());
+					var futureLocation = entity.getFutureLocation();
 
 					if(this.circleCollision(futureLocation, _entity.getLocation(), entity.radius, _entity.radius)){
-						if(!(entity instanceof app.PlayerEntity)){
-							var inverse = vec2.inverse(entity.velocity);
-							var collisionForce = vec2.create();
+						var inverse = vec2.inverse(entity.velocity);
+						var collisionForce = vec2.create();
+						vec2.add(collisionForce, inverse, _entity.velocity);
 
-							if(entity.previousLocation !== null)
-								entity.setLocation(vec2.clone(entity.previousLocation));
+						entity.applyForce(vec2.inverse(entity.acceleration));
+						entity.velocity = vec2.create();
 
-							vec2.add(collisionForce, inverse, _entity.velocity);
-
-							entity.velocity = vec2.create();
-							entity.acceleration = vec2.create();
-							entity.applyForce(vec2.multiplyByScalar(collisionForce, 1.5));
-
+						entity.applyForce(vec2.multiplyByScalar(collisionForce, 0.8));
 							entity.triggerCollisionResolution(_entity);
-
-						}
+						
 					}
 				}
 			}
-
-				entity.previousLocation = vec2.clone(entity.getLocation());
-				entity.update(dt);
+			entity.update(dt);
 		}
-    };
+	};
 
-    p.render = function(ctx){
-    	for(var i = 0; i < this.entities.length; i++)
+	p.render = function(ctx){
+		for(var i = 0; i < this.entities.length; i++)
 		{
 			this.entities[i].render(ctx);
 		}
-    };
+	};
 
-		p.getPossibleCollidingObjects = function(entity){
-			var possibleCollisions = [];
+	p.getPossibleCollidingObjects = function(entity){
+		var possibleCollisions = [];
 
-			var range_x = Math.abs(entity.velocity[0] * 5 + entity.radius * 5);
-			var range_y = Math.abs(entity.velocity[1] * 5 + entity.radius * 5);
+		var range_x = Math.abs(entity.getWidth() * 3);
+		var range_y = Math.abs(entity.getHeight() * 3);
 
-			if(range_x != 0 || range_y != 0){
-				for(var i = 0; i < this.entities.length; i++)
+		if(range_x != 0 || range_y != 0){
+			for(var i = 0; i < this.entities.length; i++)
+			{
+				var _entity = this.entities[i];
+
+				if(_entity === entity){
+					continue;
+				}
+
+				if((_entity.getLocation()[0] <= entity.getLocation()[0] + range_x && _entity.getLocation()[0] >= entity.getLocation()[0] - range_x) &&
+						(_entity.getLocation()[1] <= entity.getLocation()[1] + range_y &&	_entity.getLocation()[1] >= entity.getLocation()[1] - range_y))
 				{
-					var _entity = this.entities[i];
-
-					if(_entity == entity){
-						continue;
-					}
-
-					if((_entity.getLocation()[0] <= entity.getLocation()[0] + range_x &&
-					  	_entity.getLocation()[0] >= entity.getLocation()[0] - range_x) ||
-					 		(_entity.getLocation()[1] <= entity.getLocation()[1] + range_y &&
-					 		_entity.getLocation()[1] >= entity.getLocation()[1] - range_y)){
-								possibleCollisions.push(_entity);
-					}
+					possibleCollisions.push(_entity);
 				}
 			}
-			return possibleCollisions;
 		}
+		return possibleCollisions;
+	}
 
-    p.circleCollision = function(loc1, loc2, radius1, radius2){
+	p.circleCollision = function(loc1, loc2, radius1, radius2){
 		var dx = loc1[0] - loc2[0];
 		var dy = loc1[1] - loc2[1];
 		var distance = Math.sqrt(dx*dx + dy*dy);

@@ -6,6 +6,8 @@ app.PlayerEntity = function(){
 
   var PlayerEntity = function(x,y,radius,col,mass,type){
     app.Entity.call(this,x,y,radius,col,mass,type);
+
+    this.applyCollisions = false;
     this.health = 1000;
     this.forms = {"THROW" : 0, "CATCH" : 1};
     this.form = this.forms.THROW;
@@ -31,9 +33,10 @@ app.PlayerEntity = function(){
 
   p.jump = function(){
   	if(this.velocity[1] >= 0) {
-		    this.applyWorldForces([vec2.fromValues(0, -20)]);
-	  }
+		this.applyForce(vec2.fromValues(0, -10));
+	}
   }
+
 
   p.changeForm = function(form){
     this.form = this.forms[form] != null ? this.forms[form] : this.form;
