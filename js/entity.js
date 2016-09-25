@@ -16,7 +16,7 @@ app.Entity = function(){
 		this.sprite = null;
 		this.controller = null;
 
-		this.previousLocaiton = null;
+		this.applyCollisions = true;
 
 		this.removeCondition = null;
 
@@ -47,6 +47,16 @@ app.Entity = function(){
 		return this.location;
 	}
 
+	p.getWidth = function(){
+		//should be overridden/modified for support of more complex entities with different types
+		return this.radius;
+	}
+
+	p.getHeight = function(){
+		//should be overridden/modified for support of more complex entities with different types
+		return this.radius;
+	}
+
 	p.getRadius = function(){
 		return this.radius;
 	}
@@ -69,10 +79,15 @@ app.Entity = function(){
 			return false;
 	};
 
+	p.getFutureLocation = function(dt){
+		 return updateLocation(this.velocity,this.acceleration,this.location);
+	};
+
 	p.update = function(dt){
 		if(this.controller !== null){
 			this.controller.update(this);
 		}
+
 		if(this.sprite !== null){
 			this.sprite.update(dt);
 		}
@@ -98,7 +113,7 @@ app.Entity = function(){
 					this.location[1] = 0 + this.radius;
 				}
 
-				updateLocation(this.velocity,this.acceleration,this.location);
+				this.location = updateLocation(this.velocity,this.acceleration,this.location);
 				this.acceleration = vec2.create();
 
 				break;
@@ -110,8 +125,10 @@ app.Entity = function(){
 	};
 
 	p.render = function(ctx){
-		if(this.sprite != null){this.sprite.render(ctx, this.location); }
-		app.draw.polygon(ctx,this.location[0],this.location[1],this.radius,8,this.col);
+		if(this.sprite != null){
+			this.sprite.render(ctx, this.location);
+		}	else {
+			app.draw.polygon(ctx,this.location[0],this.location[1],this.radius,8,this.col); }
 	};
 
 	p.applyWorldForces = function(wolrdForces){
