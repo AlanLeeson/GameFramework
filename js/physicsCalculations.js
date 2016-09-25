@@ -12,14 +12,9 @@ function updateLocation(velocity,acceleration,location){
 
 	vec2.add(velocity,velocity,acceleration);
 	//add velocity to location
-<<<<<<< HEAD
 	vec2.add(updatedLocation,location,velocity);
 
 	return updatedLocation;
-=======
-	vec2.add(location,location,velocity);
-	//Zero the acceleration
-	acceleration = vec2.create();
 }
 
 function getFutureLocation(velocity,acceleration,location){
@@ -31,7 +26,6 @@ function getFutureLocation(velocity,acceleration,location){
 	vec2.add(futureLocation,futureLocation,acceleration);
 
 	return futureLocation;
->>>>>>> framework_example_game
 }
 
 
