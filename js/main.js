@@ -66,6 +66,12 @@ app.Main = {
 		/*** Initialize world and its conditions ***/
 		this.loadedForces = [vec2.fromValues(0,0.4)];
 		this.world = new app.World(this.loadedForces);
+
+		// Create and add a boss
+		var bossEntity = new app.Entity(this.bounds.width/2, 100, 200, "", 2, "stationary");
+		bossEntity.setSprite(new app.Sprite('assets/BossSprite.png', [0, 0], [101, 101], [200, 200], 1 [0]));
+		this.world.addEntity(bossEntity);
+
 		var bounds = this.bounds;
 		this.world.setUpdateFunction(function(){
 			while(this.numEntities() < 5){
@@ -118,11 +124,6 @@ app.Main = {
 		entityPlayer.setController(keyboardController);
 		entityPlayer.setRemoveCondition(function(){return false;});
 		entityPlayer.setSprite(new app.Sprite('assets/player.png', [0, 0], [100, 100], [100, 100], 1, [0]))
-
-		/*** Create and add a boss ***/
-		var bossEntity = new app.Entity(this.bounds.width/2, 100, 100, "", 2, "stationary");
-		bossEntity.setSprite(new app.Sprite('assets/BossSprite.png', [0, 0], [101, 101], [200, 200], 1 [0]));
-		this.world.addEntity(bossEntity);
 
 		/*** Finish setting the world and game object ***/
 		this.world.addEntity(entityPlayer);
