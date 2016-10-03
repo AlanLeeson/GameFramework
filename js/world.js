@@ -78,7 +78,7 @@ app.World = function(){
 				continue;
 			}
 
-			if(entity.type == "moveable" && entity.applyCollisions) {
+			if(entity.type == "moveable") {
 
 				var possibleCollisions = this.getPossibleCollidingObjects(entity);
 				for(var j = 0; j < possibleCollisions.length; j++){
@@ -87,16 +87,27 @@ app.World = function(){
 					var futureLocation = entity.getFutureLocation();
 
 					if(this.circleCollision(futureLocation, _entity.getLocation(), entity.radius, _entity.radius)){
-						var inverse = vec2.inverse(entity.velocity);
 						var collisionForce = vec2.create();
-						vec2.add(collisionForce, inverse, _entity.velocity);
+						vec2.add(collisionForce, entity.velocity, _entity.velocity);
 
-						entity.applyForce(vec2.inverse(entity.acceleration));
-						entity.velocity = vec2.create();
+						if(entity.applyCollisions)
+						{
+							entity.applyForce(vec2.inverse(entity.acceleration));
+							entity.velocity = vec2.create();
 
-						entity.applyForce(vec2.multiplyByScalar(collisionForce, 0.8));
+							entity.applyForce(vec2.multiplyByScalar(vec2.inverse(collisionForce), 0.6));
 							entity.triggerCollisionResolution(_entity);
-						
+						}
+
+						if(_entity.applyCollisions)
+						{
+							_entity.applyForce(vec2.inverse(_entity.acceleration));
+							_entity.velocity = vec2.create();
+
+							_entity.applyForce(vec2.multiplyByScalar(vec2.inverse(collisionForce), 0.6));
+							_entity.triggerCollisionResolution(entity);
+						}
+
 					}
 				}
 			}

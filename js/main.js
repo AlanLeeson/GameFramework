@@ -84,13 +84,12 @@ app.Main = {
 				});
 
 				entity.setCollisionResolution(function(_entity){
- 					if(this.velocity[0] == 0 && this.velocity[1] == 0 &&
- 						_entity.velocity[0] == 0 && _entity.velocity[1] == 0)
- 					{
- 						this.remove = true;
- 					}
+ 					//if(this.velocity[0] == 0 && this.velocity[1] == 0 &&
+ 					//	_entity.velocity[0] == 0 && _entity.velocity[1] == 0)
+ 					//{
+ 					//	this.remove = true;
+ 					//}
  				});
-
 				entity.setSprite(new app.Sprite('assets/projectile.png', [0, 0], [100, 100], [50, 50], 1, [0]));
 
 				this.addEntity(entity);
