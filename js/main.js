@@ -23,7 +23,7 @@ app.Main = {
 		this.ratio = 400/400;
 		this.canvas = document.querySelector('canvas');
 		this.canvas.style.width = window.innerWidth + 'px';
-        this.canvas.style.height = (window.innerHeight * this.ratio) + 'px';
+    this.canvas.style.height = (window.innerHeight * this.ratio) + 'px';
 		this.ctx = this.canvas.getContext('2d');
 
 		/*** Set up the game object which holds game logic and states. ***/
@@ -66,12 +66,18 @@ app.Main = {
 		/*** Initialize world and its conditions ***/
 		this.loadedForces = [vec2.fromValues(0,0.4)];
 		this.world = new app.World(this.loadedForces);
+
+		// Create and add a boss
+		var bossEntity = new app.Entity(this.bounds.width/2, 100, 200, "", 2, "stationary");
+		bossEntity.setSprite(new app.Sprite('assets/BossSprite.png', [0, 0], [101, 101], [200, 200], 1 [0]));
+		this.world.addEntity(bossEntity);
+
 		var bounds = this.bounds;
 		this.world.setUpdateFunction(function(){
 			while(this.numEntities() < 5){
 				var entity =	new app.Entity(
 					bounds['width'] * Math.random(), 0,
-					Math.random() * 10 + 5,app.draw.randomRGBA(200,0,0.5), 20, "moveable");
+					20, app.draw.randomRGBA(200,0,0.5), 20, "moveable");
 
 				entity.setRemoveCondition(function(){
 					return this.getLocation()[1] + this.getRadius() >= bounds["height"];
@@ -84,14 +90,13 @@ app.Main = {
  					//	this.remove = true;
  					//}
  				});
-
-				entity.setSprite(new app.Sprite('spriteExample.png', [0, 0], [15.875, 16], 10, [0, 1, 2, 3, 4, 5, 6, 7]));
+				entity.setSprite(new app.Sprite('assets/projectile.png', [0, 0], [100, 100], [50, 50], 1, [0]));
 
 				this.addEntity(entity);
 			}
 		});
 
-		var entityPlayer = new app.PlayerEntity(this.bounds["width"] / 2, this.bounds["height"] / 2, 20, 'rgba(255,0,0,1)', 0, "moveable");
+		var entityPlayer = new app.PlayerEntity(this.bounds["width"] / 2, this.bounds["height"] / 2, 50, 'rgba(255,0,0,1)', 0, "moveable");
 
 		/*** Create a keyboard controller to handle player actions ***/
 		var keyboardController = new app.KeyboardController();
@@ -117,6 +122,7 @@ app.Main = {
 		}, true)
 		entityPlayer.setController(keyboardController);
 		entityPlayer.setRemoveCondition(function(){return false;});
+		entityPlayer.setSprite(new app.Sprite('assets/player.png', [0, 0], [100, 100], [100, 100], 1, [0]))
 
 		/*** Finish setting the world and game object ***/
 		this.world.addEntity(entityPlayer);
