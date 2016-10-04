@@ -87,24 +87,28 @@ app.World = function(){
 					var futureLocation = entity.getFutureLocation();
 
 					if(this.circleCollision(futureLocation, _entity.getLocation(), entity.radius, _entity.radius)){
-						var collisionForce = vec2.create();
-						vec2.add(collisionForce, entity.velocity, _entity.velocity);
 
 						if(entity.applyCollisions)
 						{
+							var collisionForceA = vec2.create();
+							vec2.add(collisionForceA, vec2.inverse(entity.velocity), _entity.velocity);
+
 							entity.applyForce(vec2.inverse(entity.acceleration));
 							entity.velocity = vec2.create();
 
-							entity.applyForce(vec2.multiplyByScalar(vec2.inverse(collisionForce), 0.6));
+							entity.applyForce(vec2.multiplyByScalar(collisionForceA, 0.8));
 							entity.triggerCollisionResolution(_entity);
 						}
 
 						if(_entity.applyCollisions)
 						{
+							var collisionForceB = vec2.create();
+							vec2.add(collisionForceB, vec2.inverse(_entity.velocity), entity.velocity);
+
 							_entity.applyForce(vec2.inverse(_entity.acceleration));
 							_entity.velocity = vec2.create();
 
-							_entity.applyForce(vec2.multiplyByScalar(vec2.inverse(collisionForce), 0.6));
+							_entity.applyForce(vec2.multiplyByScalar(vec2.inverse(collisionForceB), 0.8));
 							_entity.triggerCollisionResolution(entity);
 						}
 
