@@ -14,6 +14,9 @@ app.World = function(){
 		this.updateFunction = null;
 
 		this.currentState = 0;
+
+		this.backgroundSprite = undefined;
+		this.worldBounds = vec2.create();
 	};
 
 	var p = World.prototype;
@@ -36,6 +39,15 @@ app.World = function(){
 
 	p.setUpdateFunction = function(updateFunction){
 		this.updateFunction = updateFunction;
+	};
+
+	p.setBackgroundSprite = function(sprite){
+		this.backgroundSprite = sprite;
+	};
+
+	p.setWorldBounds = function(bounds){
+		this.worldBounds = bounds;
+		console.log(this.worldBounds);
 	};
 
 	p.doUpdateFunction = function(){
@@ -120,6 +132,9 @@ app.World = function(){
 	};
 
 	p.render = function(ctx){
+		if (this.backgroundSprite !== undefined) {
+			this.backgroundSprite.render(ctx, vec2.fromValues(this.worldBounds.width / 2, this.worldBounds.height / 2));
+		}
 		for(var i = 0; i < this.entities.length; i++)
 		{
 			this.entities[i].render(ctx);

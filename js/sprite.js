@@ -30,7 +30,7 @@ app.Sprite = function(){
 		if(!resources.get(this.url)) {return; }
 		var frame;
 
-		var center = vec2.fromValues(location[0]-(this.size[0]/2), location[1] - (this.size[1]/2));
+		var center = vec2.fromValues(location[0]-(this.size[0]/2), location[1] - (this.size[1]/2))
 		if(this.speed > 0) {
 			var max = this.frames.length;
 			var idx = Math.floor(this._index);

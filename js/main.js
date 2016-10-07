@@ -20,7 +20,7 @@ app.Main = {
 	init : function(){
 
 		/*** Assign the canvas and the canvas context ***/
-		this.ratio = 400/400;
+		this.ratio = 1/1;
 		this.canvas = document.querySelector('canvas');
 		this.canvas.style.width = window.innerWidth + 'px';
     this.canvas.style.height = (window.innerHeight * this.ratio) + 'px';
@@ -66,10 +66,13 @@ app.Main = {
 		/*** Initialize world and its conditions ***/
 		this.loadedForces = [vec2.fromValues(0,0.4)];
 		this.world = new app.World(this.loadedForces);
+		[0, 0], [100, 100], [50, 50], 1, [0]
+		this.world.setBackgroundSprite(new app.Sprite('assets/Background.png', [0, 0], [1240, 785], [this.bounds.width, this.bounds.height], 0, [0]));
+		this.world.setWorldBounds(this.bounds);
 
 		// Create and add a boss
 		var bossEntity = new app.Entity(this.bounds.width/2, 100, 200, "", 2, "stationary");
-		bossEntity.setSprite(new app.Sprite('assets/BossSprite.png', [0, 0], [101, 101], [200, 200], 1 [0]));
+		bossEntity.setSprite(new app.Sprite('assets/BossSprite.png', [0, 0], [101, 101], [200, 200], 0, [0]));
 		this.world.addEntity(bossEntity);
 
 		var bounds = this.bounds;
@@ -95,7 +98,7 @@ app.Main = {
  						this.remove = true;
  					}
  				});
-				entity.setSprite(new app.Sprite('assets/projectile.png', [0, 0], [100, 100], [50, 50], 1, [0]));
+				entity.setSprite(new app.Sprite('assets/projectile.png', [0, 0], [100, 100], [50, 50], 0, [0]));
 
 				this.addEntity(entity);
 			}

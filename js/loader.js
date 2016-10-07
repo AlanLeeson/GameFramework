@@ -10,7 +10,8 @@ window.onload = function(){
     	'menuBackground.jpg',
 			'assets/player.png',
 			'assets/projectile.png',
-			'assets/BossSprite.png'
+			'assets/BossSprite.png',
+			'assets/Background.png'
 	]);
 
 	//start the game.
