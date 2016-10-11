@@ -71,8 +71,9 @@ app.Main = {
 		this.world.setWorldBounds(this.bounds);
 
 		// Create and add a boss
-		var bossEntity = new app.Entity(this.bounds.width/2, 100, 200, "", 2, "stationary");
+		var bossEntity = new app.Entity(this.bounds.width/2, 100, 100, "", 2, "moveable");
 		bossEntity.setSprite(new app.Sprite('assets/BossSprite.png', [0, 0], [101, 101], [200, 200], 0, [0]));
+		bossEntity.affectedByWorld = false;
 		this.world.addEntity(bossEntity);
 
 		var bounds = this.bounds;
@@ -102,6 +103,7 @@ app.Main = {
 
 				this.addEntity(entity);
 			}
+			bossEntity.applyForce(seek(bossEntity.location, vec2.create(), bossEntity.velocity, 0.2, 0.5));
 		});
 
 		var entityPlayer = new app.PlayerEntity(this.bounds["width"] / 2, this.bounds["height"] / 2, 50, 'rgba(255,0,0,1)', 0, "moveable");

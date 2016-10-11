@@ -125,7 +125,9 @@ app.World = function(){
 					}
 				}
 			}
-			entity.applyWorldForces(this.forces);
+			if(entity.affectedByWorld) {
+				entity.applyWorldForces(this.forces);
+			}
 			entity.update(dt);
 		}
 	};

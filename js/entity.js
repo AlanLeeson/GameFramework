@@ -17,6 +17,7 @@ app.Entity = function(){
 		this.controller = null;
 
 		this.applyCollisions = true;
+		this.affectedByWorld = true;
 
 		this.remove = false;
 		this.removeCondition = null;
