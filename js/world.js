@@ -83,8 +83,6 @@ app.World = function(){
 			var entity = this.entities[i];
 			var updateLocation = true;
 
-			entity.applyWorldForces(this.forces);
-
 			if(entity.canRemove()){
 				this.entities.splice(i, 1);
 				continue;
@@ -98,7 +96,7 @@ app.World = function(){
 
 					var futureLocation = entity.getFutureLocation();
 
-					if(this.circleCollision(futureLocation, _entity.getLocation(), entity.radius, _entity.radius)){
+					if(this.circleCollision(entity.getFutureLocation(), _entity.getFutureLocation(), entity.radius, _entity.radius)){
 
 						if(entity.applyCollisions)
 						{
@@ -127,6 +125,7 @@ app.World = function(){
 					}
 				}
 			}
+			entity.applyWorldForces(this.forces);
 			entity.update(dt);
 		}
 	};
