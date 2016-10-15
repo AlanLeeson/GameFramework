@@ -11,7 +11,8 @@ window.onload = function(){
 			'assets/player.png',
 			'assets/projectile.png',
 			'assets/BossSprite.png',
-			'assets/Background.png'
+			'assets/Background.png',
+			'assets/MenuBackground.png'
 	]);
 
 	//start the game.
