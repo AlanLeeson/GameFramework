@@ -47,7 +47,6 @@ app.World = function(){
 
 	p.setWorldBounds = function(bounds){
 		this.worldBounds = bounds;
-		console.log(this.worldBounds);
 	};
 
 	p.doUpdateFunction = function(){

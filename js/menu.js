@@ -4,14 +4,15 @@ var app = app || {};
 
 app.Menu = function(){
 
-	var Menu = function(type){
+	var Menu = function(type, size){
 		this.type = type;
 		this.controller = null;
 
 		this.listeners = [];
 		this.buttons = [];
-		this.title = "Your New Game";
-		this.backgroundSprite;
+		this.size = size
+		this.title;
+		this.backgroundSprite = undefined;
 	};
 
 	var p = Menu.prototype;
@@ -30,7 +31,7 @@ app.Menu = function(){
 		this.title = title;
 	};
 
-	p.addBackgroundSprite = function(sprite){
+	p.setBackgroundSprite = function(sprite){
 		this.backgroundSprite = sprite;
 	};
 
@@ -45,9 +46,11 @@ app.Menu = function(){
 
 	p.render = function(ctx){
 		if (this.backgroundSprite != undefined) {
-			this.backgroundSprite.render(ctx, app.Main.bounds);
+			this.backgroundSprite.render(ctx, this.size);
 		}
-		app.draw.text(ctx,this.title,100,50,30,'rgba(50,50,50,1)');
+		if (this.title != undefined) {
+			app.draw.text(ctx,this.title,100,50,30,'rgba(50,50,50,1)');
+		}
 	};
 
 	return Menu;
