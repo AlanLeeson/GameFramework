@@ -10,6 +10,7 @@ app.Menu = function(){
 
 		this.listeners = [];
 		this.buttons = [];
+		this.texts = [];
 		this.size = size
 		this.title;
 		this.backgroundSprite = undefined;
@@ -40,13 +41,21 @@ app.Menu = function(){
 		this.controller.init();
 	};
 
-	p.update = function(dt){
+	p.addText = function(text){
+		this.texts.push(text);
+	};
 
+	p.update = function(dt){
+		
 	};
 
 	p.render = function(ctx){
 		if (this.backgroundSprite != undefined) {
 			this.backgroundSprite.render(ctx, this.size);
+		}
+		for(var i = 0; i < this.texts.length; i ++) {
+			var text = this.texts[i];
+			app.draw.text(ctx, text.text, text.xPos, text.yPos, text.size, text.col);
 		}
 		if (this.title != undefined) {
 			app.draw.text(ctx,this.title,100,50,30,'rgba(50,50,50,1)');

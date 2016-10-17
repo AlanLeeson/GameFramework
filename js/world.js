@@ -13,7 +13,7 @@ app.World = function(){
 
 		this.updateFunction = null;
 
-		this.currentState = 0;
+		this.currentState = 2;
 
 		this.backgroundSprite = undefined;
 		this.worldBounds = vec2.create();

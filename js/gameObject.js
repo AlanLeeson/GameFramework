@@ -35,11 +35,11 @@ app.GameObject = function () {
 	p.setWorld = function(world) {
 		this.world = world;
 	};
-	
+
 	p.setMenu = function(menu) {
 		this.menu = menu;
 	};
-	
+
 	p.update = function(dt) {
 		if(this.controller !== null){
 			this.controller.update(this);
@@ -60,7 +60,7 @@ app.GameObject = function () {
 		}
 		else if(this.states.PAUSE === this.world.currentState){
 			this.world.render(ctx);
-			app.draw.text(ctx,"Currently Paused",100,100,20,'rgba(50,50,200,1)');
+			app.draw.text(ctx,"Currently Paused",100,400,50,'rgba(50,50,200,1)');
 		}
 		else if(this.states.MENU === this.world.currentState){
 			this.menu.render(ctx);
