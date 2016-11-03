@@ -23,6 +23,7 @@ app.Entity = function(){
 		this.remove = false;
 		this.removeCondition = null;
 		this.collisionResolution = null;
+		this.touchedPlayer = false;
 
 		this.listeners = [];
 	};
@@ -67,6 +68,14 @@ app.Entity = function(){
 
 	p.getRadius = function(){
 		return this.radius;
+	}
+
+	p.setTouchedPlayer = function(touched){
+		this.touchedPlayer = touched;
+	}
+
+	p.getTouchedPlayer = function(){
+		return this.touchedPlayer;
 	}
 
 	p.setController = function(controller){
