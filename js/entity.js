@@ -6,12 +6,13 @@ app.Entity = function(){
 
 	var Entity = function(x,y,radius,col,mass,type){
 		this.type = type;
+		this.id = this.generateUUID();
 		this.col = col;
 		this.radius = radius;
 		this.location = vec2.fromValues(x,y);
 		this.velocity = vec2.create();
 		this.acceleration = vec2.create();
-		this.movementSpeed = mass;
+		this.mass = mass;
 		this.maxVelocity = vec2.fromValues(5,5);
 		this.sprite = null;
 		this.controller = null;
@@ -48,6 +49,10 @@ app.Entity = function(){
 
 	p.getLocation = function(){
 		return this.location;
+	}
+
+	p.getId = function(){
+		return this.id;
 	}
 
 	p.getWidth = function(){
@@ -112,7 +117,7 @@ app.Entity = function(){
 
 		switch(this.type) {
 			case 'moveable' :
-			var speed = this.movementSpeed * dt;
+			var speed = this.mass * dt;
 
 			if((this.location[0] + this.radius) >= app.Main.bounds["width"]){
 				this.velocity[0] *= -speed;
@@ -139,9 +144,7 @@ app.Entity = function(){
 			this.velocity = vec2.create();
 			this.acceleration = vec2.create();
 			break;
-
 		}
-
 	};
 
 	p.render = function(ctx){
@@ -153,12 +156,22 @@ app.Entity = function(){
 
 		p.applyWorldForces = function(wolrdForces){
 			for(var i = 0; i < wolrdForces.length; i ++){
-				applyForce(wolrdForces[i], this.acceleration);
+				applyForce(wolrdForces[i], this.acceleration, this.mass);
 			}
 		};
 
 		p.applyForce = function(force){
-			applyForce(force, this.acceleration);
+			applyForce(force, this.acceleration, this.mass);
+		};
+
+		p.generateUUID = function(){
+	    var d = new Date().getTime();
+	    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+	        var r = (d + Math.random()*16)%16 | 0;
+	        d = Math.floor(d/16);
+	        return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+	    });
+	    return uuid;
 		};
 
 		return Entity;

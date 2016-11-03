@@ -100,12 +100,12 @@ app.World = function(){
 						if(entity.applyCollisions)
 						{
 							var collisionForceA = vec2.create();
-							vec2.add(collisionForceA, vec2.inverse(entity.velocity), _entity.velocity);
+							vec2.add(collisionForceA, entity.velocity, _entity.velocity);
 
 							entity.applyForce(vec2.inverse(entity.acceleration));
 							entity.velocity = vec2.create();
 
-							entity.applyForce(vec2.multiplyByScalar(collisionForceA, 0.8));
+							entity.applyForce(vec2.multiplyByScalar(collisionForceA, 2.0));
 							entity.triggerCollisionResolution(_entity);
 						}
 
@@ -117,7 +117,7 @@ app.World = function(){
 							_entity.applyForce(vec2.inverse(_entity.acceleration));
 							_entity.velocity = vec2.create();
 
-							_entity.applyForce(vec2.multiplyByScalar(vec2.inverse(collisionForceB), 0.8));
+							_entity.applyForce(vec2.multiplyByScalar(collisionForceB, 1.0));
 							_entity.triggerCollisionResolution(entity);
 						}
 

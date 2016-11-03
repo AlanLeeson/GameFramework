@@ -70,15 +70,17 @@ app.Main = {
 		this.gameObject.setMenu(this.menu);
 
 		/*** Initialize world and its conditions ***/
-		this.loadedForces = [vec2.fromValues(0,0.4)];
+		this.loadedForces = [vec2.fromValues(0,0.5)];
 		this.world = new app.World(this.loadedForces);
 		[0, 0], [100, 100], [50, 50], 1, [0]
-		this.world.setBackgroundSprite(new app.Sprite('assets/Background.png', [0, 0], [1240, 785], [this.bounds.width, this.bounds.height], 0, [0]));
+		this.world.setBackgroundSprite(new app.Sprite('assets/Background.png',
+			[0, 0], [1240, 785], [this.bounds.width, this.bounds.height], 0, [0]));
 		this.world.setWorldBounds(this.bounds);
 
 		// Create and add a boss
-		var bossEntity = new app.Entity(this.bounds.width/2, 100, 100, "", 2, "moveable");
-		bossEntity.setSprite(new app.Sprite('assets/BossSprite.png', [0, 0], [101, 101], [200, 200], 0, [0]));
+		var bossEntity = new app.Entity(this.bounds.width/2, 100, 100, "", 10, "moveable");
+		bossEntity.setSprite(new app.Sprite('assets/BossSprite.png', [0, 0],
+			[101, 101], [200, 200], 0, [0]));
 		bossEntity.affectedByWorld = false;
 		this.world.addEntity(bossEntity);
 
@@ -87,7 +89,7 @@ app.Main = {
 			while(this.numEntities() < 5){
 				var entity =	new app.Entity(
 					bounds['width'] * Math.random(), 0,
-					20, app.draw.randomRGBA(200,0,0.5), 20, "moveable");
+					20, app.draw.randomRGBA(200,0,0.5), 2, "moveable");
 
 				entity.setRemoveCondition(function(){
 					return this.getLocation()[1] + this.getRadius() >= bounds["height"];
@@ -97,13 +99,16 @@ app.Main = {
 					if(_entity instanceof app.PlayerEntity)
 					{
 						return;
+					} else if (_entity.id === bossEntity.getId())
+					{
+						this.remove = true;
 					}
 
- 					if(this.velocity[0] == 0 && this.velocity[1] == 0 &&
- 						_entity.velocity[0] == 0 && _entity.velocity[1] == 0)
- 					{
- 						this.remove = true;
- 					}
+ 				// 	if(this.velocity[0] == 0 && this.velocity[1] == 0 &&
+ 				// 		_entity.velocity[0] == 0 && _entity.velocity[1] == 0)
+ 				// 	{
+ 				// 		this.remove = true;
+ 				// 	}
  				});
 				entity.setSprite(new app.Sprite('assets/projectile.png', [0, 0], [100, 100], [50, 50], 0, [0]));
 
@@ -112,7 +117,7 @@ app.Main = {
 			bossEntity.applyForce(arrive(bossEntity.location, vec2.create(), bossEntity.velocity, 0.2, 0.5));
 		});
 
-		var entityPlayer = new app.PlayerEntity(this.bounds["width"] / 2, this.bounds["height"] / 2, 50, 'rgba(255,0,0,1)', 0, "moveable");
+		var entityPlayer = new app.PlayerEntity(this.bounds["width"] / 2, this.bounds["height"] / 2, 50, 'rgba(255,0,0,1)', 1, "moveable");
 
 		/*** Create a keyboard controller to handle player actions ***/
 		var keyboardController = new app.KeyboardController();
@@ -135,7 +140,7 @@ app.Main = {
 		keyboardController.assignKeyAction([ " " ], function(entity)
 		{
 			entity.form == entity.forms.THROW ? entity.changeForm("CATCH") : entity.changeForm("THROW");
-		}, true)
+		}, true);
 		entityPlayer.setController(keyboardController);
 		entityPlayer.setRemoveCondition(function(){return false;});
 		entityPlayer.setSprite(new app.Sprite('assets/player.png', [0, 0], [100, 100], [100, 100], 1, [0]))
@@ -152,8 +157,8 @@ app.Main = {
 	gameLoop : function(){
 		//calls this method every frame
 		requestAnimationFrame(this.gameLoop.bind(this));
-    	this.update();
-    	this.render(this.ctx);
+    this.update();
+    this.render(this.ctx);
 	},
 
 	//renders all objects in the game

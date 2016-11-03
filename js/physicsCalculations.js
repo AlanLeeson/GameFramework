@@ -2,7 +2,9 @@
 
 var app = app || {};
 
-function applyForce(force,acceleration){
+function applyForce(force,acceleration,mass){
+
+	force = vec2.divideByScalar(force, mass == undefined ? 1 : mass);
 	//add the force to acceleration
 	vec2.add(acceleration, acceleration, force);
 }

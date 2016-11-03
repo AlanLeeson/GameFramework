@@ -293,10 +293,17 @@ vec2.divide = function(out, a, b) {
     return out;
 };
 
-vec2.divideByScalar = function(out, a){
-    out[0] = out[0] / a;
-    out[1] = out[1] / a;
-    return out;
+// vec2.divideByScalar = function(out, a){
+//     out[0] = out[0] / a;
+//     out[1] = out[1] / a;
+//     return out;
+// }
+
+vec2.divideByScalar = function(a, b){
+  var out = new GLMAT_ARRAY_TYPE(2);
+  out[0] = a[0] / b;
+  out[1] = a[1] / b;
+  return out;
 }
 
 /**
