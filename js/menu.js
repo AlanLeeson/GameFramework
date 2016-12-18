@@ -4,14 +4,16 @@ var app = app || {};
 
 app.Menu = function(){
 
-	var Menu = function(type){
+	var Menu = function(type, size){
 		this.type = type;
 		this.controller = null;
 
 		this.listeners = [];
 		this.buttons = [];
+		this.texts = [];
+		this.size = size
 		this.title = "Your New Game";
-		this.backgroundSprite;
+		this.backgroundSprite = undefined;
 	};
 
 	var p = Menu.prototype;
@@ -21,16 +23,16 @@ app.Menu = function(){
 			this.listeners[i].doUpdateMenuEvent(this);
 		}
 	}
-	
+
 	p.addButton = function(button){
 		this.buttons.add(button);
 	};
-	
+
 	p.addTitle = function(title){
 		this.title = title;
 	};
-	
-	p.addBackgroundSprite = function(sprite){
+
+	p.setBackgroundSprite = function(sprite){
 		this.backgroundSprite = sprite;
 	};
 
@@ -39,16 +41,25 @@ app.Menu = function(){
 		this.controller.init();
 	};
 
+	p.addText = function(text){
+		this.texts.push(text);
+	};
+
 	p.update = function(dt){
-		
+
 	};
 
 	p.render = function(ctx){
 		if (this.backgroundSprite != undefined) {
-			this.backgroundSprite.render(ctx, app.Main.bounds);
-			console.log(this.backgroundSprite);
+			this.backgroundSprite.render(ctx, this.size);
 		}
-		app.draw.text(ctx,this.title,100,50,30,'rgba(50,50,50,1)');
+		for(var i = 0; i < this.texts.length; i ++) {
+			var text = this.texts[i];
+			app.draw.text(ctx, text.text, text.xPos, text.yPos, text.size, text.col);
+		}
+		if (this.title != undefined) {
+			app.draw.text(ctx,this.title,100,50,30,'rgba(50,50,50,1)');
+		}
 	};
 
 	return Menu;

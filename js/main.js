@@ -59,7 +59,7 @@ app.Main = {
 
 		/*** Initialize menu ***/
 		this.menu = new app.Menu();
-		this.menu.addBackgroundSprite(new app.Sprite('menuBackground.jpg', [0, 0], [this.bounds.width, this.bounds.height], 0));
+		this.menu.setBackgroundSprite(new app.Sprite('menuBackground.jpg', [0, 0], [this.bounds.width, this.bounds.height], 0));
 		this.menu.addTitle("MENU TITLE");
 		this.gameObject.setMenu(this.menu);
 
