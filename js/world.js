@@ -6,13 +6,13 @@ app.World = function(){
 
 	var World = function(forces){
 		this.type = "world";
-		
+
 		this.forces = forces;
-		
+
     	this.entities = [];
 
 		this.updateFunction = null;
-		
+
 		this.currentState = 0;
 	};
 
@@ -76,19 +76,6 @@ app.World = function(){
 				this.entities.splice(i, 1);
 				continue;
 			}
-
-			if(entity.type == "stationary"){
-				for(var j = 0; j < this.entities.length; j++)
-				{
-					if(this.entities[j].type == "moveable" &&
-						this.circleCollision(this.entities[j].location, entity.location,
-						 this.entities[j].radius, this.entities[i].radius)){
-						var inverse = vec2.multiplyByScalar(vec2.inverse(this.entities[j].velocity), 2);
-						this.entities[j].applyWorldForces([inverse]);
-					}
-				}
-			}
-
 			entity.update(dt);
 		}
     };

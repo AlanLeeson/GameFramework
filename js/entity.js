@@ -17,7 +17,7 @@ app.Entity = function(){
 		this.controller = null;
 
 		this.removeCondition = null;
-
+		this.bounds = null;
 		this.listeners = [];
 	};
 
@@ -32,7 +32,7 @@ app.Entity = function(){
 	p.addUpdateListener = function(listener){
 		this.listeners.push(listener);
 	}
-	
+
 	p.setSprite = function(sprite){
 		this.sprite = sprite;
 	}
@@ -63,34 +63,46 @@ app.Entity = function(){
 			return false;
 	};
 
+	p.assignBounds = function(top, right, bottom, left){
+		this.bounds = {"top" : top, "right" : right, "bottom" : bottom, "left" : left};
+	}
+
+	p.respectBounds = function(dt)
+	{
+		if (this.bounds !== null)
+		{
+			var speed = this.movementSpeed * dt;
+			if((this.location[0] + this.radius) >= this.bounds["right"]){
+				this.velocity[0] *= -speed;
+				this.location[0] = this.bounds["right"] - this.radius;
+			}
+			if((this.location[0] - this.radius) <= this.bounds["left"]){
+				this.velocity[0] *= -speed;
+				this.location[0] = this.bounds["left"] + this.radius;
+			}
+			if((this.location[1] + this.radius) > this.bounds["bottom"]){
+				this.velocity[1] *= -speed;
+				this.location[1] = this.bounds["bottom"] - this.radius;
+			}
+			if((this.location[1] - this.radius) <= this.bounds["top"]){
+				this.velocity[1] *= -speed;
+				this.location[1] = this.bounds["top"] + this.radius;
+			}
+		}
+	}
+
 	p.update = function(dt){
 		if(this.controller !== null){
 			this.controller.update(this);
 		}
-		if(this.sprite !== null){		
+		if(this.sprite !== null){
 			this.sprite.update(dt);
 		}
-		
+
 		switch(this.type) {
 			case 'moveable' :
-				var speed = this.movementSpeed * dt;
 
-				if((this.location[0] + this.radius) >= app.Main.bounds["width"]){
-					this.velocity[0] *= -speed;
-					this.location[0] = app.Main.bounds["width"] - this.radius;
-				}
-				if((this.location[0] - this.radius) <= 0){
-					this.velocity[0] *= -speed;
-					this.location[0] = 0 + this.radius;
-				}
-				if((this.location[1] + this.radius) > app.Main.bounds["height"]){
-					this.velocity[1] *= -speed;
-					this.location[1] = app.Main.bounds["height"] - this.radius;
-				}
-				if((this.location[1] - this.radius) <= 0){
-					this.velocity[1] *= -speed;
-					this.location[1] = 0 + this.radius;
-				}
+				this.respectBounds(dt);
 
 				updateLocation(this.velocity,this.acceleration,this.location);
 				this.acceleration = vec2.create();

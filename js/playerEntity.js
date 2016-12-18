@@ -12,30 +12,38 @@ app.PlayerEntity = function(){
   PlayerEntity.prototype = Object.create(app.Entity.prototype);
   PlayerEntity.prototype.construction = PlayerEntity;
   var p = PlayerEntity.prototype;
-  
+
   p.moveLeft = function(force){
   	if(this.velocity[0] > 0) {this.velocity = vec2.fromValues(0, this.velocity[1]);}
   	this.applyWorldForces(force);
   };
-  
+
   p.moveRight = function(force){
   	if(this.velocity[0] < 0) {this.velocity = vec2.fromValues(0, this.velocity[1]);}
   	this.applyWorldForces(force);
   }
-  
+
   p.stopRightLeft = function(){
   	this.velocity[0] = this.velocity[0] / 10;
   }
-  
-  p.jump = function(){
-  	if(this.velocity[1] >= 0) {
-		this.applyWorldForces([vec2.fromValues(0, -20)]);
-	}
+
+  p.moveDown = function(force){
+    if(this.velocity[1] < 0) {this.velocity = vec2.fromValues(this.velocity[0], 0);}
+  	this.applyWorldForces(force);
   }
-  
+
+  p.moveUp = function(force){
+    if(this.velocity[1] > 0) {this.velocity = vec2.fromValues(this.velocity[0], 0);}
+  	this.applyWorldForces(force);
+  }
+
+  p.stopUpDown = function(){
+    this.velocity[1] = this.velocity[1] / 10;
+  }
+
   p.render = function(ctx){
   	if(this.sprite != null){this.sprite.render(ctx, this.location); }
-	app.draw.polygon(ctx,this.location[0],this.location[1],this.radius,4,this.col);
+	app.draw.polygon(ctx,this.location[0],this.location[1],this.radius,8,this.col);
   }
 
   return PlayerEntity;

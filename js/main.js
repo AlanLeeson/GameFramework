@@ -64,36 +64,14 @@ app.Main = {
 		this.gameObject.setMenu(this.menu);
 
 		/*** Initialize world and its conditions ***/
-		this.loadedForces = [vec2.fromValues(0,1)];
+		this.loadedForces = [vec2.fromValues(0,0)];
 		this.world = new app.World(this.loadedForces);
 		var bounds = this.bounds;
 		this.world.setUpdateFunction(function(){
-			while(this.numEntities() < 50){
-				var entity =	new app.Entity(
-					bounds['width'] * Math.random(), 0,
-					Math.random() * 10 + 5,app.draw.randomRGBA(200,0,0.5), Math.random() * 20, "moveable");
-
-				entity.setRemoveCondition(function(){
-					return this.getLocation()[1] + this.getRadius() >= bounds["height"];
-				});
-				entity.setSprite(new app.Sprite('spriteExample.png', [0, 0], [15.875, 16], 10, [0, 1, 2, 3, 4, 5, 6, 7]));
-
-				this.addEntity(entity);
-			}
 		});
 
-		/*** Initialize entities ***/		
-		var entity = new app.Entity(this.bounds["width"]/6, 50, 40, 'rgba(255,0,0,1)', 0, "stationary");
-		this.world.addEntity(entity);
-		entity = new app.Entity(this.bounds["width"]*3/8, 50, 40, 'rgba(0,255,0,1)', 0, "stationary");
-		this.world.addEntity(entity);
-		entity = new app.Entity(this.bounds["width"]*5/8, 50, 40, 'rgba(0,0,255,1)', 0, "stationary");
-		this.world.addEntity(entity);
-		entity = new app.Entity(this.bounds["width"]*5/6, 50, 40, 'rgba(255,255,0,1)', 0, "stationary");
-		this.world.addEntity(entity);
-
 		var entityPlayer = new app.PlayerEntity(this.bounds["width"] / 2, this.bounds["height"] / 2, 20, 'rgba(255,0,0,1)', 0, "moveable");
-		
+
 		/*** Create a keyboard controller to handle player actions ***/
 		var keyboardController = new app.KeyboardController();
 		keyboardController.assignKeyAction([ "a", "ArrowLeft" ], function(entity)
@@ -106,15 +84,24 @@ app.Main = {
 		});
 		keyboardController.assignKeyUpAction([ "a", "ArrowLeft", "d", "ArrowRight" ], function(entity)
 		{
-			entity.stopRightLeft();	
+			entity.stopRightLeft();
 		});
 		keyboardController.assignKeyAction([ "w", "ArrowUp" ], function(entity)
 		{
-			entity.jump();
-		}, true);
+			entity.moveUp([vec2.fromValues(0, -1.5)]);
+		});
+		keyboardController.assignKeyAction([ "s", "ArrowDown"], function (entity)
+		{
+			entity.moveDown([vec2.fromValues(0, 1.5)]);
+		});
+		keyboardController.assignKeyUpAction([ "w", "ArrowUp", "s", "ArrowDown"], function (entity)
+		{
+			entity.stopUpDown();
+		})
+		entityPlayer.assignBounds(0, this.bounds["width"], this.bounds["height"], 0);
 		entityPlayer.setController(keyboardController);
 		entityPlayer.setRemoveCondition(function(){return false;});
-		
+
 		/*** Finish setting the world and game object ***/
 		this.world.addEntity(entityPlayer);
 		this.gameObject.setWorld(this.world);
@@ -141,7 +128,6 @@ app.Main = {
 	update : function(){
 		//find deltaTime
 		var dt  = this.calculateDeltaTime();
-
 		this.gameObject.update(dt);
 	},
 
