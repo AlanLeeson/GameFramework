@@ -12,7 +12,7 @@ app.World = function(){
     	this.entities = [];
 
 		this.updateFunction = null;
-
+		this.backgroundSprite = undefined;
 		this.currentState = 0;
 	};
 
@@ -20,10 +20,6 @@ app.World = function(){
 
     p.getGravity = function(){
         return this.gravity;
-    };
-
-    p.getWind = function(){
-        return this.wind;
     };
 
     p.getForces = function(){
@@ -37,6 +33,10 @@ app.World = function(){
 		p.setUpdateFunction = function(updateFunction){
 			this.updateFunction = updateFunction;
 		};
+
+		p.setBackgroundSprite = function(sprite){
+		this.backgroundSprite = sprite;
+	};
 
 		p.doUpdateFunction = function(){
 			if (this.updateFunction !== null) {
@@ -81,11 +81,41 @@ app.World = function(){
     };
 
     p.render = function(ctx){
-    	for(var i = 0; i < this.entities.length; i++)
-		{
-			this.entities[i].render(ctx);
-		}
+			if (this.backgroundSprite !== undefined) {
+				this.backgroundSprite.render(ctx, vec2.fromValues(this.worldBounds.width / 2, this.worldBounds.height / 2));
+			}
+			for(var i = 0; i < this.entities.length; i++)
+			{
+				this.entities[i].render(ctx);
+			}
     };
+
+		p.getPossibleCollidingObjects = function(entity){
+		var possibleCollisions = [];
+
+		var range_x = Math.abs(entity.getWidth() * 3);
+		var range_y = Math.abs(entity.getHeight() * 3);
+
+		if(range_x != 0 || range_y != 0){
+			for(var i = 0; i < this.entities.length; i++)
+			{
+				var _entity = this.entities[i];
+
+				if(_entity === entity){
+					continue;
+				}
+
+				if((_entity.getLocation()[0] <= entity.getLocation()[0] + range_x &&
+						_entity.getLocation()[0] >= entity.getLocation()[0] - range_x) &&
+						(_entity.getLocation()[1] <= entity.getLocation()[1] + range_y &&
+						_entity.getLocation()[1] >= entity.getLocation()[1] - range_y))
+				{
+					possibleCollisions.push(_entity);
+				}
+			}
+		}
+		return possibleCollisions;
+	}
 
     p.circleCollision = function(loc1, loc2, radius1, radius2){
 		var dx = loc1[0] - loc2[0];
