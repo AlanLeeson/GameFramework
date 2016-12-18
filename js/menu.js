@@ -12,7 +12,7 @@ app.Menu = function(){
 		this.buttons = [];
 		this.texts = [];
 		this.size = size
-		this.title = "Your New Game";
+		this.title;
 		this.backgroundSprite = undefined;
 	};
 

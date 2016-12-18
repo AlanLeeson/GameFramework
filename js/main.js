@@ -58,9 +58,15 @@ app.Main = {
 		this.gameObject.setController(keyboardController);
 
 		/*** Initialize menu ***/
-		this.menu = new app.Menu();
-		this.menu.setBackgroundSprite(new app.Sprite('menuBackground.jpg', [0, 0], [this.bounds.width, this.bounds.height], 0));
-		this.menu.addTitle("MENU TITLE");
+		this.menu = new app.Menu("main", vec2.fromValues(this.bounds.width / 2, this.bounds.height / 2));
+		this.menu.setBackgroundSprite(new app.Sprite('menuBackground.jpg', [0, 0], [1440, 785], [this.bounds.width, this.bounds.height], 0, [0]));
+		this.menu.addText({
+			"text" : "Press \"m\" to Play",
+			"xPos" : (this.bounds.width * 3 / 10),
+			"yPos" : (this.bounds.height * 5 / 6),
+			"size" : "50",
+			"col" : app.draw.randomRGBA(100)
+		});
 		this.gameObject.setMenu(this.menu);
 
 		/*** Initialize world and its conditions ***/
