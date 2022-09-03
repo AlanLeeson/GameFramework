@@ -112,7 +112,7 @@ app.Main = {
 
 				this.addEntity(entity);
 			}
-			bossEntity.applyForce(arrive(bossEntity.location, vec2.create(), bossEntity.velocity, 0.2, 0.5));
+			bossEntity.applyForce(arrive(bossEntity.location, vec2.create(), bossEntity.velocity, 0.5, 0.5));
 		});
 
 		var entityPlayer = new app.PlayerEntity(this.bounds["width"] / 2, this.bounds["height"] / 2, 50, 'rgba(255,0,0,1)', 1, "moveable");

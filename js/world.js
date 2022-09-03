@@ -156,8 +156,10 @@ app.World = function(){
 					continue;
 				}
 
-				if((_entity.getLocation()[0] <= entity.getLocation()[0] + range_x && _entity.getLocation()[0] >= entity.getLocation()[0] - range_x) &&
-						(_entity.getLocation()[1] <= entity.getLocation()[1] + range_y &&	_entity.getLocation()[1] >= entity.getLocation()[1] - range_y))
+				if((_entity.getLocation()[0] <= entity.getLocation()[0] + range_x &&
+						_entity.getLocation()[0] >= entity.getLocation()[0] - range_x) &&
+						(_entity.getLocation()[1] <= entity.getLocation()[1] + range_y &&
+						_entity.getLocation()[1] >= entity.getLocation()[1] - range_y))
 				{
 					possibleCollisions.push(_entity);
 				}
